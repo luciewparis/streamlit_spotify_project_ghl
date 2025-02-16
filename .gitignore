@@ -4,5 +4,5 @@
 .env
 
 # Large datasets in the folders inputs and data
-inputs/
-data/
+inputs/*.csv
+data/*.csv
