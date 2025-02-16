@@ -1,0 +1,8 @@
+.python-version
+
+# Variables d'environnement avec les credentials du compte spotify
+.env
+
+# Large datasets in the folders inputs and data
+inputs/
+data/
