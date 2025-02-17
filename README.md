@@ -1,6 +1,10 @@
 # Project presentation
+
 ### Context
 ### Objectives
+Produce a data-driven analysis that will help actors in the music market by answering two problematics : 
+How to create a successful hit?
+How to design a successful festival lineup?"
 ### Contributors
 
 # Project structure
