@@ -5,7 +5,6 @@
 
 # Large datasets in the folders inputs and data
 inputs/*.csv
-data/*.csv
 
 # Working notebooks (not finalized)
 draft/
