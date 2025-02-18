@@ -21,6 +21,6 @@ Conduct a data-driven analysis to assist actors in the music industry by address
 - .env.template: contains the credentials required for the API calls (spotify) - to be filled in with your spotify app credentials
 - Folder streamlit: contains the user interface of our Streamlit-based application. It is structured to organize the different pages and resources used in the application
   - home.py: Home page that introduces the application and allows navigation to other pages.
-  - Folder pages/: Contains the various secondary pages accessible from Streamlit's sidebar menu.
-  - Folder images/: Stores images used in the application.
+  - Folder pages: Contains the various secondary pages accessible from Streamlit's sidebar menu.
+  - Folder images: Stores images used in the application.
   - requirements.txt: Lists the necessary Python libraries to run the application
