@@ -75,8 +75,7 @@ with tab2:
     st.title("What are the audio features of successful tracks in 2023?")
 
    # Get initial data
-    filepath = os.path.join('..', '..', 'data','2023_Most_Streamed_clean_api_genre.csv')
-    df = pd.read_csv(filepath)
+    df = pd.read_csv('./data/2023_Most_Streamed_clean_api_genre.csv')
 
     st.header("Comparison between TOP N")
     df_polar_2 = pd.DataFrame({
