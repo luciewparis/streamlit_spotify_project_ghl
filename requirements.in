@@ -1,9 +1,0 @@
-streamlit
-matplotlib
-numpy
-pandas
-plotly
-seaborn
-streamlit_player
-altair<5
-statsmodels
