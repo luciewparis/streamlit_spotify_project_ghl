@@ -6,9 +6,9 @@ import ast
 
 st.markdown("<h1 style='text-align: center;'> Analysis of the Impact of Platforms and Social Networks on Spotify Streams</h1>",
 unsafe_allow_html=True,)
-tabs = st.tabs(["Spotity", "Other platforms", "YouTube", "TikTok"])
+tabs = st.tabs(["Spotify", "Other platforms", "YouTube", "TikTok"])
 
-#tabs = ["Spotity", "Other platforms", "YouTube", "TikTok"]
+#tabs = ["Spotiy", "Other platforms", "YouTube", "TikTok"]
 #selected_tab = st.radio("", tabs, horizontal=True)
 
 df=pd.read_csv('./data/2024_most_streamed_clean_final_1.csv')
@@ -32,6 +32,7 @@ with tabs[0]:
     #st.write('The most streamed titles are mainly from the last 3 to 5 years, which could be linked to the growing influence of social networks during this period. It would be worth investigating whether this link holds true.')
     
     data["Release Date"] = pd.to_datetime(data["Release Date"], errors='coerce')
+    data["Release Date"]
     data["Release Year"] = data["Release Date"].dt.year
     song_count_by_year = data.groupby("Release Year").size().reset_index(name="Song Count")
 
