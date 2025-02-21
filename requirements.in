@@ -5,3 +5,4 @@ numpy
 pandas
 plotly
 seaborn
+streamlit_player
