@@ -76,47 +76,207 @@ with tab1:
 with tab2:
     st.title("What are the audio features of successful tracks in 2023?")
 
+   # Get initial data
+    filepath = os.path.join('..', '..', 'data','2023_Most_Streamed_clean_api_genre.csv')
+    df = pd.read_csv(filepath)
+
+    st.header("Comparison between TOP N")
+    df_polar_2 = pd.DataFrame({
+        'audio_feature': ['speechiness_%', 'danceability_%', 'valence_%', 'energy_%', 'acousticness_%', 'liveness_%', 'instrumentalness_%'],
+        'metric': ['mean', 'mean','mean','mean','mean','mean','mean' ]
+        })
+    df_polar_2 = pd.concat([df_polar_2, df_polar_2, df_polar_2], ignore_index=True)
+    df_top = df.iloc[:2]
+    df_polar_2.loc[df_polar_2.index.isin(range(7,14)),'metric'] = 'max'
+    df_polar_2.loc[df_polar_2.index.isin(range(14,21)),'metric'] = 'min'
+    df_polar_2 = pd.DataFrame({
+        'audio_feature': ['speechiness_%', 'danceability_%', 'valence_%', 'energy_%', 'acousticness_%', 'liveness_%', 'instrumentalness_%'],
+        'metric': ['mean', 'mean','mean','mean','mean','mean','mean' ]
+    })
+    def get_metric(row):
+        if row['metric'] == 'mean':
+            return df_top[f"{row['audio_feature']}"].mean()
+        elif row['metric'] == 'max':
+            return df_top[f"{row['audio_feature']}"].max()
+        elif row['metric'] == 'min':
+            return df_top[f"{row['audio_feature']}"].min()
+        else:
+            return "metric not found"
+    
+    df_polar_2['value'] = df_polar_2.apply(get_metric, axis =1)
+
+    # define top10
+    df_polar_10 = df_polar_2
+    df_top = df.iloc[:10]
+    df_polar_10['value'] = df_polar_2.apply(get_metric, axis =1)
+
+    # define top25
+    df_polar_25 = df_polar_2
+    df_top = df.iloc[:25]
+    df_polar_25['value'] = df_polar_2.apply(get_metric, axis =1)
+
+    # define top50
+    df_polar_50 = df_polar_2
+    df_top = df.iloc[:50]
+    df_polar_50['value'] = df_polar_2.apply(get_metric, axis =1)
+    df_polar_all = df_polar_2
+    df_top = df
+    df_polar_all['value'] = df_polar_2.apply(get_metric, axis =1)
+
+    # define top100
+    df_polar_100 = df_polar_2
+    df_top = df.iloc[:100]
+    df_polar_100['value'] = df_polar_2.apply(get_metric, axis =1)
+
+    # define top all
+    df_polar_all = df_polar_2
+    df_top = df
+    df_polar_all['value'] = df_polar_2.apply(get_metric, axis =1)
+
+    df_polar_compare = pd.concat([df_polar_2.loc[df_polar_2['metric']=="mean"], 
+                              df_polar_10.loc[df_polar_10['metric']=="mean"], 
+                              df_polar_25.loc[df_polar_25['metric']=="mean"], 
+                              df_polar_50.loc[df_polar_50['metric']=="mean"], 
+                              df_polar_all.loc[df_polar_all['metric']=="mean"]],
+                              ignore_index=True)
+    df_polar_compare['top N'] = ['top2', 'top2','top2','top2','top2','top2','top2', 
+                                'top10', 'top10','top10','top10','top10','top10','top10',
+                                'top25', 'top25', 'top25', 'top25','top25','top25','top25',
+                                'top50', 'top50','top50','top50','top50','top50','top50',
+                                'top1000','top1000','top1000','top1000','top1000','top1000','top1000']
+    fig_polar = px.line_polar(df_polar_compare, 
+              r='value', 
+              theta='audio_feature', 
+              color='top N', 
+              line_close=True, 
+              title = 'Audio profiles per TOP N') 
+    st.plotly_chart(fig_polar)
+
+    st.header("Focus on TOP 2")
+    fig_polar = px.line_polar(df_polar_2, 
+              r='value', 
+              theta='audio_feature', 
+              color='metric', 
+              line_close=True, 
+              title = 'TOP2 tracks audio profile') 
+    st.plotly_chart(fig_polar)
+
+    st.header("Focus on TOP 10")
+    fig_polar = px.line_polar(df_polar_10.loc[df_polar_10['metric']=="mean"], 
+              r='value', 
+              theta='audio_feature', 
+              color='metric', 
+              line_close=True, 
+              title = 'TOP10 tracks audio profile') 
+    st.plotly_chart(fig_polar)
+
+    st.header("Focus on TOP 25")
+    fig_polar = px.line_polar(df_polar_25.loc[df_polar_25['metric']=="mean"], 
+              r='value', 
+              theta='audio_feature', 
+              color='metric', 
+              line_close=True, 
+              title = 'TOP25 tracks audio profile') 
+    st.plotly_chart(fig_polar)
+
+    st.header("Focus on TOP 50")
+    fig_polar = px.line_polar(df_polar_50.loc[df_polar_50['metric']=="mean"], 
+              r='value', 
+              theta='audio_feature', 
+              color='metric', 
+              line_close=True, 
+              title = 'TOP50 tracks audio profile') 
+    st.plotly_chart(fig_polar)
+
+    st.header("Focus on TOP 100")
+    fig_polar = px.line_polar(df_polar_100.loc[df_polar_100['metric']=="mean"], 
+              r='value', 
+              theta='audio_feature', 
+              color='metric', 
+              line_close=True, 
+              title = 'TOP100 tracks audio profile') 
+    st.plotly_chart(fig_polar)
+    
+    st.header("Focus on TOP 1000")
+    fig_polar = px.line_polar(df_polar_all.loc[df_polar_all['metric']=="mean"], 
+              r='value', 
+              theta='audio_feature', 
+              color='metric', 
+              line_close=True, 
+              title = 'All tracks audio profile') 
+    st.plotly_chart(fig_polar)
+
 # ################# TAB 3 #################
 with tab3:
     st.title("Detailed analysis")
 
-    st.markdown('### 1. Overview of most successful songs, by number of spotify streams')
+    st.header('Overview of most successful songs, by number of spotify streams')
     text_1 = "Most streamed tracks have between **150M and 700M** streams on Spotify, with a median at **290M** streams. \nThe distribution's average is at 514M streams, highly skewed by the top-performing tracks, **max** being at **4 Bn** views."
     st.write(text_1)
-
-    # Get initial data
-    filepath = os.path.join('..', '..', 'data','2023_Most_Streamed_clean_api_genre.csv')
-    df = pd.read_csv(filepath)
 
     fig = px.histogram(df['streams'], title='Distribution of nb of streams')
     st.plotly_chart(fig)
 
     # st.header("BPM")
     # st.markdown("Most popular songs have a BPM between 100 and 140, with a median/mean at around 121. The TOP10 tracks range between 90 and 186, about half above average, and the other half below. This indicates indeed that BPM is not a significant factor to predict a track's success, although it is a safe choice to be within the standard range mentioned above. - We will deep dive more into this audio feature when looking at the genre.")
+    df_top10=df.iloc[:10]   
 
     st.header("Danceability - details")
     st.markdown("Most popular songs are very suitable for dancing, with a danceability between 60 and 80%, and a mean/median around 68%. However, contrary to instrumentalness and speechiness which had a very narrow range, danceability has a broader range, with some TOP3 songs having a danceability lower than average, at 50% ('Blinding lights', 'Someone you loved')")
 
+    fig = px.histogram(df['danceability_%'], title='Distribution of danceability', nbins=30)
+    st.plotly_chart(fig)
+    fig = px.box(df['danceability_%'], title='Distribution of danceability')
+    fig.show()
+    st.plotly_chart(fig)
+
+    st.markdown("### Focus on TOP10 danceability")
+    
+    df_line_mean_dance = pd.Series(np.full(10, df['danceability_%'].mean()))
+    df_line_median_dance = pd.Series(np.full(10, df['danceability_%'].median()))
+
+    fig = px.bar(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
+                y=df_top10['danceability_%'], 
+                labels={'x':'track name', 'y':'danceability'})
+    fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
+                            y=df_line_mean_dance, 
+                            mode = 'lines', 
+                            marker_color='orange',
+                            name="danceability mean"))
+    fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
+                            y=df_line_median_dance, 
+                            mode = 'lines', 
+                            marker_color='blue',
+                            name="danceability median"))
+    fig.update_layout(height=600, title='Danceability for the TOP10 tracks, compared to mean and median')
+    st.plotly_chart(fig)
+
     st.header("Speechiness - details")
     st.markdown("Most popular songs have a low speechiness, between 4-11% (median: 6%), which can be considered as almost with no spoken words. Note that the mean (10%) is skewed by several outliers with higher speechiness. ")
     
+    st.markdown("### Focus on TOP10 Speechiness")
 
     st.header("Valence - details")
     st.markdown("Valence distribution is quite even and symmetrical around the mean/median 51%. Most values are between 32% and 70%. Popular songs can either have high valence and convey positive energy, or have low valence, conveying sad vibes, as well as neutral valence. This makes sense as we tend to listen to songs in various contexts (to feel energized and pumped, comforted when sad, to focus...). We find higher and lower than average valence tracks among the TOP10, which ranges between more extreme values: from 36% to 93%.")
     
+    st.markdown("### Focus on TOP10 Valence")
 
     st.header("Energy - details")
     st.markdown("Most popular songs have a rather high energy, between 53% and 77%. Mean and median are close, at around 65%. TOP10 tracks have values below and above average, from 41% ('Someone you love') to 80% ('Blinding lights') !")
     
+    st.markdown("### Focus on TOP10 Energy")
 
     st.header("Acousticness - details")
     st.markdown("Most popular songs have acousticness values within a broad range from 6 to 43%, with a median at 18%. With half of the TOP10 tracks above average, and half below, this audio feature is clearly not a parameter telling us if a track will be more popular or not.")
     
+    st.markdown("### Focus on TOP10 Acousticness")
 
     st.header("Liveness - details")
     st.markdown("Most popular songs have a low liveness, between 10-24% (median at 12%), showing studio tracks make more streams. Only 2 tracks of the TOP10 have a higher liveness than average with 'One Dance' achieving even 35%. However, those are all studio tracks, and almost no popular song is live (only 5 tracks, i.e. 0.5% have a liveness >80%).")
     
+    st.markdown("### Focus on TOP10 Liveness")
 
     st.header("Instrumentalness - not considered?")
     st.markdown("Most popular songs contain vocals (0% instrumentalness). The TOP10 songs are 100% vocal. This makes sense with the speechiness % analyzed above: popular songs have vocals, but not too much.")
     
+    st.markdown("### Focus on TOP10 Instrumentalness")
