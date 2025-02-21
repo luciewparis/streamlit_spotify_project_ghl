@@ -11,7 +11,7 @@ tabs = st.tabs(["Spotity", "Other platforms", "YouTube", "TikTok"])
 #tabs = ["Spotity", "Other platforms", "YouTube", "TikTok"]
 #selected_tab = st.radio("", tabs, horizontal=True)
 
-df=pd.read_csv('/Users/betsy/Documents/streamlit_spotify_project_ghl/data/2024_most_streamed_clean_final_1.csv')
+df=pd.read_csv('./data/2024_most_streamed_clean_final_1.csv')
 data=df
 
 
@@ -281,7 +281,7 @@ with tabs[3]:
     
     
 
-    df_genre_spotify = pd.read_csv('/Users/betsy/Documents/streamlit_spotify_project_ghl/data/top 100 spotify  - top_100_songs_spotify (2).csv')
+    df_genre_spotify = pd.read_csv('./data/top 100 spotify  - top_100_songs_spotify (2).csv')
     
     
     top_5_genres_spotify = df_genre_spotify.groupby('artist_genres1')['Spotify Streams'].sum().reset_index()
@@ -297,7 +297,7 @@ with tabs[3]:
      
 
 
-    df_genre_tiktok =pd.read_csv('/Users/betsy/Documents/streamlit_spotify_project_ghl/data/top_100_songs_tiktok - top_100_songs_tiktok.csv')
+    df_genre_tiktok =pd.read_csv('./data/top_100_songs_tiktok - top_100_songs_tiktok.csv')
 
     top_5_genres_tiktok = df_genre_tiktok.groupby('artist_genres')['TikTok Views'].sum().reset_index()
     top_5_genres_tiktok = top_5_genres_tiktok.sort_values(by='TikTok Views', ascending=False).head(5)
