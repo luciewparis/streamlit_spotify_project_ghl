@@ -29,14 +29,14 @@ if selected_tab == "Introduction":
         """
     )
 
-    image_path = "/Users/medazz/code/streamlit_spotify_project_ghl/streamlit/images/image_festival.jpg" 
+    image_path = "./streamlit/images/image_festival.jpg" 
     st.image(image_path, use_column_width=True)
 
 elif selected_tab == "Analysis Factors":
     st.markdown("## Popularity")  
     st.markdown("### 1- Top Spotify Artists") 
 
-    file_path = "/Users/medazz/code/streamlit_spotify_project_ghl/data/cleaned_Spotify_Songs_2024.csv" 
+    file_path = "./data/cleaned_Spotify_Songs_2024.csv" 
     
     
     try:
@@ -189,7 +189,7 @@ elif selected_tab == "Analysis Factors":
     """)
     
     st.markdown("## Geographic Influence")
-    file_path = "/Users/medazz/code/streamlit_spotify_project_ghl/data/Merged_Spotify_Data_with_region_spotyfolow_markets.csv"
+    file_path = "./data/Merged_Spotify_Data_with_region_spotyfolow_markets.csv"
     df = pd.read_csv(file_path)
     # Function to count available markets
     def count_markets(value):
@@ -309,9 +309,9 @@ elif selected_tab == "Tools & Data":
         st.markdown("**Matplotlib**")
     
     with col5:
-        st.image("/Users/medazz/code/streamlit_spotify_project_ghl/streamlit/images/pandas.png", width=80)
+        st.image("./streamlit/images/pandas.png", width=80)
         st.markdown("**Pandas**")
         
     with col6:
-        st.image("/Users/medazz/code/streamlit_spotify_project_ghl/streamlit/images/apify.png", width=80)
+        st.image("./streamlit/images/apify.png", width=80)
         st.markdown("**Apify**")
