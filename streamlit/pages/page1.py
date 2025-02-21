@@ -21,15 +21,6 @@ with tab1:
     st_player("https://youtu.be/pekzpzNCNDQ?si=WpQ-nqNY1GBOdtZA&t=68")
     st.markdown("Example of a track with *low danceability (23%)*: #372")
 
-    st.header("BPM")
-
-    st.header("Danceability")
-    st.markdown("Danceability describes how suitable a track is for dancing based on a combination of musical elements including tempo, rhythm stability, beat strength, and overall regularity. A value of 0.0 is least danceable and 100% is most danceable.")
-    
-    st.markdown("Example of a track with **high danceability (96%)**: ")
-    st_player("https://youtu.be/pekzpzNCNDQ?si=WpQ-nqNY1GBOdtZA&t=68")
-    st.markdown("Example of a track with *low danceability (23%)*: ")
-
     st.markdown("Example of a track with **high Speechiness (64%)**: #856 ")
     st_player("https://youtu.be/OZgQnRcGZXs?si=2znKGsUTzCvjPXUt&t=63")
     st.markdown("Example of a track with *low Speechiness (2%)*: this track at position #61 has half the amount of lyrics of the above track")
@@ -113,44 +104,41 @@ with tab2:
     df_polar_2['value'] = df_polar_2.apply(get_metric, axis =1)
 
     # define top10
-    df_polar_10 = df_polar_2
+    df_polar_10 = df_polar_2.copy()
     df_top = df.iloc[:10]
-    df_polar_10['value'] = df_polar_2.apply(get_metric, axis =1)
+    df_polar_10['value'] = df_polar_10.apply(get_metric, axis =1)
 
     # define top25
-    df_polar_25 = df_polar_2
+    df_polar_25 = df_polar_2.copy()
     df_top = df.iloc[:25]
-    df_polar_25['value'] = df_polar_2.apply(get_metric, axis =1)
+    df_polar_25['value'] = df_polar_25.apply(get_metric, axis =1)
 
     # define top50
-    df_polar_50 = df_polar_2
+    df_polar_50 = df_polar_2.copy()
     df_top = df.iloc[:50]
-    df_polar_50['value'] = df_polar_2.apply(get_metric, axis =1)
-    df_polar_all = df_polar_2
-    df_top = df
-    df_polar_all['value'] = df_polar_2.apply(get_metric, axis =1)
+    df_polar_50['value'] = df_polar_50.apply(get_metric, axis =1)
 
     # define top100
-    df_polar_100 = df_polar_2
+    df_polar_100 = df_polar_2.copy()
     df_top = df.iloc[:100]
-    df_polar_100['value'] = df_polar_2.apply(get_metric, axis =1)
+    df_polar_100['value'] = df_polar_100.apply(get_metric, axis =1)
 
     # define top all
-    df_polar_all = df_polar_2
+    df_polar_all = df_polar_2.copy()
     df_top = df
-    df_polar_all['value'] = df_polar_2.apply(get_metric, axis =1)
+    df_polar_all['value'] = df_polar_all.apply(get_metric, axis =1)
 
+    # draw audio profile per top N
     df_polar_compare = pd.concat([df_polar_2.loc[df_polar_2['metric']=="mean"], 
-                              df_polar_10.loc[df_polar_10['metric']=="mean"], 
-                              df_polar_25.loc[df_polar_25['metric']=="mean"], 
-                              df_polar_50.loc[df_polar_50['metric']=="mean"], 
-                              df_polar_all.loc[df_polar_all['metric']=="mean"]],
-                              ignore_index=True)
+                                df_polar_10.loc[df_polar_10['metric']=="mean"],  
+                                df_polar_50.loc[df_polar_50['metric']=="mean"], 
+                                df_polar_all.loc[df_polar_all['metric']=="mean"]],
+                                ignore_index=True)
     df_polar_compare['top N'] = ['top2', 'top2','top2','top2','top2','top2','top2', 
                                 'top10', 'top10','top10','top10','top10','top10','top10',
-                                'top25', 'top25', 'top25', 'top25','top25','top25','top25',
                                 'top50', 'top50','top50','top50','top50','top50','top50',
                                 'top1000','top1000','top1000','top1000','top1000','top1000','top1000']
+    
     fig_polar = px.line_polar(df_polar_compare, 
               r='value', 
               theta='audio_feature', 
@@ -159,6 +147,7 @@ with tab2:
               title = 'Audio profiles per TOP N') 
     st.plotly_chart(fig_polar)
 
+    # part focusing on top Ns
     st.header("Focus on TOP 2")
     fig_polar = px.line_polar(df_polar_2, 
               r='value', 
@@ -169,7 +158,7 @@ with tab2:
     st.plotly_chart(fig_polar)
 
     st.header("Focus on TOP 10")
-    fig_polar = px.line_polar(df_polar_10.loc[df_polar_10['metric']=="mean"], 
+    fig_polar = px.line_polar(df_polar_10, 
               r='value', 
               theta='audio_feature', 
               color='metric', 
@@ -178,7 +167,7 @@ with tab2:
     st.plotly_chart(fig_polar)
 
     st.header("Focus on TOP 25")
-    fig_polar = px.line_polar(df_polar_25.loc[df_polar_25['metric']=="mean"], 
+    fig_polar = px.line_polar(df_polar_25, 
               r='value', 
               theta='audio_feature', 
               color='metric', 
@@ -187,7 +176,7 @@ with tab2:
     st.plotly_chart(fig_polar)
 
     st.header("Focus on TOP 50")
-    fig_polar = px.line_polar(df_polar_50.loc[df_polar_50['metric']=="mean"], 
+    fig_polar = px.line_polar(df_polar_50, 
               r='value', 
               theta='audio_feature', 
               color='metric', 
@@ -196,7 +185,7 @@ with tab2:
     st.plotly_chart(fig_polar)
 
     st.header("Focus on TOP 100")
-    fig_polar = px.line_polar(df_polar_100.loc[df_polar_100['metric']=="mean"], 
+    fig_polar = px.line_polar(df_polar_100, 
               r='value', 
               theta='audio_feature', 
               color='metric', 
@@ -205,7 +194,7 @@ with tab2:
     st.plotly_chart(fig_polar)
     
     st.header("Focus on TOP 1000")
-    fig_polar = px.line_polar(df_polar_all.loc[df_polar_all['metric']=="mean"], 
+    fig_polar = px.line_polar(df_polar_all, 
               r='value', 
               theta='audio_feature', 
               color='metric', 
@@ -236,8 +225,6 @@ with tab3:
     fig = px.box(df['danceability_%'], title='Distribution of danceability')
     fig.show()
     st.plotly_chart(fig)
-
-    st.markdown("### Focus on TOP10 danceability")
     
     df_line_mean_dance = pd.Series(np.full(10, df['danceability_%'].mean()))
     df_line_median_dance = pd.Series(np.full(10, df['danceability_%'].median()))
@@ -285,35 +272,3 @@ with tab3:
 
     st.header("Instrumentalness - not considered?")
     st.markdown("Most popular songs contain vocals (0% instrumentalness). The TOP10 songs are 100% vocal. This makes sense with the speechiness % analyzed above: popular songs have vocals, but not too much.")
-    
-    st.markdown("### Focus on TOP10 Instrumentalness")
-
-
-    st.header("Instrumentalness")
-
-    st.header("Valence")
-
-    st.header("Energy")
-
-    st.header("Acousticness")
-
-################# TAB 2 #################
-with tab2:
-    st.title("What does a successful track look like in 2023?")
-
-
-################# TAB 3 #################
-with tab3:
-    st.title("Detailed analysis")
-
-    st.markdown('### 1. Overview of most successful songs, by number of spotify streams')
-    text_1 = "Most streamed tracks have between **150M and 700M** streams on Spotify, with a median at **290M** streams. \nThe distribution's average is at 514M streams, highly skewed by the top-performing tracks, **max** being at **4 Bn** views."
-    st.write(text_1)
-
-    # Get initial data
-    filepath = os.path.join('..', '..', 'data','2023_Most_Streamed_clean_api_genre.csv')
-    df = pd.read_csv(filepath)
-
-    fig = px.histogram(df['streams'], title='Distribution of nb of streams')
-    st.plotly_chart(fig)
-
