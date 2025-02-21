@@ -6,3 +6,4 @@ plotly
 seaborn
 streamlit_player
 altair<5
+statsmodels.api
