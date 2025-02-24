@@ -2,17 +2,19 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-import ast
+import seaborn as sns
+import plotly.io as pio
+pio.templates.default = 'plotly' 
 
 st.markdown("<h1 style='text-align: center;'> Analysis of the Impact of Platforms and Social Networks on Spotify Streams</h1>",
 unsafe_allow_html=True,)
-tabs = st.tabs(["Spotify", "Other platforms", "YouTube", "TikTok"])
+tabs = st.tabs(["   Spotify     ", "    Other platforms     ", "    YouTube     ", "    TikTok      "])
 
 #tabs = ["Spotiy", "Other platforms", "YouTube", "TikTok"]
 #selected_tab = st.radio("", tabs, horizontal=True)
 
-df=pd.read_csv('./data/2024_most_streamed_clean_final_1.csv')
-data=df
+data=pd.read_csv('./data/2024_most_streamed_clean_final_1.csv')
+
 
 
 
@@ -31,26 +33,34 @@ with tabs[0]:
 
     #st.write('The most streamed titles are mainly from the last 3 to 5 years, which could be linked to the growing influence of social networks during this period. It would be worth investigating whether this link holds true.')
     
+    #convert the column in the good format 
     data["Release Date"] = pd.to_datetime(data["Release Date"], errors='coerce')
-    data["Release Date"]
-    data["Release Year"] = data["Release Date"].dt.year
-    song_count_by_year = data.groupby("Release Year").size().reset_index(name="Song Count")
 
-    fig = px.bar(song_count_by_year, 
-             x="Release Year", 
-             y="Song Count")
-    st.plotly_chart(fig)
+    # transform the date to keep the year 
+    data["Year"] = data["Release Date"].dt.year.astype(int)
+
+    #Group the data by "Year" and count the number of occurrences for each year. 
+    song_count_by_year = data.groupby("Year").count()[["Track"]]
+
     
+    import plotly.figure_factory as ff
+
+    fig = px.bar(song_count_by_year,
+                 y="Track",
+                 range_x=(2000,2020)
+             )
+    fig.update_layout(template='plotly')
+    st.plotly_chart(fig)  
     
-    
+      
     st.markdown("""
     #### 🔍 **Key Insights:**  
     - The most streamed titles are mainly from the last 3 to 5 years""")
     
+    st.write("")
+    st.write("")
     
     st.markdown('<h3 style="font-size: 20px;">Distribution of Spotify Streams</h3>', unsafe_allow_html=True)
-
-    #st.write('The distribution histogram shows that the majority of tracks in this ranking have fewer than 300 million streams. Only 12% of the tracks have reached a billion streams, highlighting a concentration of streams around the lower values, with a small percentage of tracks achieving exceptional numbers.')
 
 
     fig = px.histogram(
@@ -69,8 +79,7 @@ with tabs[0]:
     st.markdown('<h3 style="font-size: 20px;">Popularity Score vs. Streams: A Weak Correlation</h3>', unsafe_allow_html=True)
 
    
-    
-    
+    # Keep values other than 0 
     filtered_data = data[data["Spotify Popularity"] != 0]
     fig = px.scatter(filtered_data, x="Spotify Popularity", y="Spotify Streams")
     st.plotly_chart(fig)
@@ -84,8 +93,6 @@ with tabs[0]:
         - Track visibility in highly popular playlists.
     """)
     
-
-    #st.write('The aim of this analysis was to identify any correlation between the popularity score and the total number of streams of a track. The results show that the correlation is relatively weak, suggesting that other factors influence the calculation of the popularity score. These include the dynamics of recent listens and the track\'s presence in playlists, particularly those with high visibility.')
     
     st.write("")
     st.write("")
@@ -93,12 +100,8 @@ with tabs[0]:
     
     st.markdown('<h3 style="font-size: 20px;">Impact of Playlists on Streaming Numbers</h3>', unsafe_allow_html=True)
     
-    #st.write("""
-    #- Correlation observed between the number of streams and playlist additions.
-    #- The more a song is added to playlists, the higher its chances of being streamed.     
-    #""")
-    
-
+   
+    # Keep values other than 0 
     filtered_data = data[data["Spotify Playlist Count"] != 0]
 
     fig = px.scatter(
@@ -108,7 +111,7 @@ with tabs[0]:
     trendline="ols" 
     )
 
-    st.plotly_chart(fig)
+    st.plotly_chart(fig,use_container_width=False)
     
     
     st.markdown("""
@@ -134,15 +137,11 @@ with tabs[1]:
     st.write("")
     
     st.markdown('<h3 style="font-size: 20px;">Limited Correlation Between Other Platforms and Spotify Streams</h3>', unsafe_allow_html=True)
-    
-    
-    #st.write("""
-    #- Popular songs vary from platform to platform.
-    #- Each platform values songs according to its own criteria and audience.   
-    #""")
 
 
 
+
+    # Keep values other than 0 and keep the values above 500
     filtered_data = data[(data["Apple Music Playlist Count"] != 0) & (data["Apple Music Playlist Count"] <= 500)]
 
     fig = px.scatter(
@@ -157,7 +156,7 @@ with tabs[1]:
    
 
 
-
+    # Keep values other than 0 and keep the values above 500
     filtered_data = data[(data["Deezer Playlist Count"] != 0) & (data["Deezer Playlist Count"] <= 400)]
 
     fig = px.scatter(
@@ -175,9 +174,6 @@ with tabs[1]:
     - Popular songs vary from platform to platform.
     - Each platform values songs according to its own criteria and audience.   
     """)
-
-
-    #st.write('The low correlation between playlists on other platforms and streams on Spotify could be due to the fact that the songs popular on one platform are not necessarily the same on the different platforms. What\'s more, each platform may be highlighting different songs according to its own criteria and audience engagement, which would explain the differences in stream levels for the tracks featured in the playlists.')
 
 
 
@@ -198,14 +194,10 @@ with tabs[2]:
     
     st.markdown('<h3 style="font-size: 20px;">Discrepancy Between YouTube Interaction and Spotify Streams</h3>', unsafe_allow_html=True)
     
-    #st.write("""
-    #- No correlation between views/likes on YouTube and streams on Spotify.
-    #- YouTube focuses on the visual experience, while Spotify is audio-centered.
-    #- Audiences may differ, with distinct preferences on each platform.
-    #""")
     
     
-
+    
+    # Keep values other than 0 and keep values below 5000000000
     filtered_data_ytb_views = data[(data["YouTube Views"] != 0) & (data["YouTube Views"] <= 5000000000)]
 
     fig = px.scatter(filtered_data_ytb_views,
@@ -215,6 +207,7 @@ with tabs[2]:
                  title="Exploring the Link Between Spotify streams and YouTube views")
     st.plotly_chart(fig)
 
+    # Keep values other than 0 and keep values below 50000000
     filtered_data_ytb_likes = data[(data["YouTube Likes"] != 0) & (data["YouTube Likes"] <= 50000000)]
 
     fig = px.scatter(filtered_data_ytb_likes,
@@ -232,6 +225,8 @@ with tabs[2]:
     
     st.markdown('<h3 style="font-size: 20px;">Comparing the Top 10 Tracks on Spotify and YouTube"</h3>', unsafe_allow_html=True)
     
+    
+    #Sort the dataset in descending order based on the "Spotify Streams" column and select the top 10 most streamed songs.  
     most_popular_spotify = data.sort_values(by='Spotify Streams', ascending=False).head(10)
 
 
@@ -240,6 +235,8 @@ with tabs[2]:
     title="TOP 10 most popular songs on Spotify")   
     st.plotly_chart(fig)
     
+    
+    #Sort the dataset in descending order based on the "YouTube Views" column and select the top 10 most viewed songs.  
     most_popular_youtube = data.sort_values(by='YouTube Views', ascending=False).head(10)
     #print(most_popular_youtube[['Track', 'YouTube Views']])
     fig = px.bar(most_popular_youtube, x="Track", 
@@ -253,10 +250,6 @@ with tabs[2]:
     - YouTube focuses on the visual experience, while Spotify is audio-centered.
     - Audiences may differ, with distinct preferences on each platform.
     """)
-    
-    #st.write('A comparison between views and likes on YouTube and streams on Spotify revealed no correlation. This may be explained by differences in usage: YouTube emphasizes the visual experience, while Spotify focuses on listening to music. In addition, the audiences for the two platforms may be distinct, and songs popular on one are not necessarily popular on the other, reflecting different preferences. Looking at the 10 most popular songs on Spotify and YouTube, we notice that the lists are not the same, with only one song in common.')
-    
-    
     
     
 with tabs[3]:
@@ -278,15 +271,15 @@ with tabs[3]:
     st.markdown('<h3 style="font-size: 20px;">Common Trends in Popular Genres Across Spotify and TikTok</h3>', unsafe_allow_html=True)
     
     
-    #st.write('An analysis of the top genres on Spotify and TikTok shows similar trends, with genres such as pop and reggaeton dominating the charts on both platforms.')
     
-    
-
+    # Loading the new csv file with top songs Spotify 
     df_genre_spotify = pd.read_csv('./data/top 100 spotify  - top_100_songs_spotify (2).csv')
     
-    
+    # Group the dataset by the first genre ("artist_genres1")  and sum the total "Spotify Streams" for each genre. 
     top_5_genres_spotify = df_genre_spotify.groupby('artist_genres1')['Spotify Streams'].sum().reset_index()
 
+
+    # Sort the genres by total "Spotify Streams" in descending order  and select the top 5 genres with the highest number of streams. 
     top_5_genres_spotify = top_5_genres_spotify.sort_values(by="Spotify Streams", ascending=False).head(5)
 
     fig = px.bar(top_5_genres_spotify, x="artist_genres1", 
@@ -297,10 +290,14 @@ with tabs[3]:
     st.plotly_chart(fig)
      
 
-
+    # Loading the new csv file with top songs TikTok
     df_genre_tiktok =pd.read_csv('./data/top_100_songs_tiktok - top_100_songs_tiktok.csv')
 
+
+    # Group the dataset by the first genre ("artist_genres1")  and sum the total "TikTok Views" for each genre. 
     top_5_genres_tiktok = df_genre_tiktok.groupby('artist_genres')['TikTok Views'].sum().reset_index()
+    
+    # Sort the genres by total "TikTok Views" in descending order  and select the top 5 genres with the highest number of streams. 
     top_5_genres_tiktok = top_5_genres_tiktok.sort_values(by='TikTok Views', ascending=False).head(5)
    
 
@@ -312,13 +309,9 @@ with tabs[3]:
     
     st.plotly_chart(fig)
        
+
     
-    #st.write("""
-    #-  No correlation between TikTok posts/likes and Spotify streams.
-    #- Hypothesis: Likes and views are more related to the content of the post than the song used.
-    #""")
-    
-    
+    #Keep values other than 0 and keep values below 50000000
     filtered_data_tiktok_views = data[(data["TikTok Views"] != 0) & (data["TikTok Views"] <= 50000000)]
     fig_tiktok_streams = px.scatter(filtered_data_tiktok_views, 
     x="TikTok Views", 
@@ -334,7 +327,5 @@ with tabs[3]:
     - Hypothesis: Likes and views are more related to the content of the post than the song used.
     """)
 
-
-    #st.write('There is no correlation between TikTok posts and likes and Spotify streams. One possible hypothesis is that the likes and views are more related to the content of the post itself rather than the song used.')
     
     
