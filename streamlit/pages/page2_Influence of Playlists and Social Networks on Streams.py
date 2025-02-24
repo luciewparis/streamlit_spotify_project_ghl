@@ -8,7 +8,8 @@ pio.templates.default = 'plotly'
 
 st.markdown("<h1 style='text-align: center;'> Analysis of the Impact of Platforms and Social Networks on Spotify Streams</h1>",
 unsafe_allow_html=True,)
-tabs = st.tabs(["   Spotify     ", "    Other platforms     ", "    YouTube     ", "    TikTok      "])
+
+tabs = st.tabs(["       Spotify     ", "    Other platforms     ", "    YouTube     ", "    TikTok      "])
 
 #tabs = ["Spotiy", "Other platforms", "YouTube", "TikTok"]
 #selected_tab = st.radio("", tabs, horizontal=True)
@@ -26,6 +27,8 @@ with tabs[0]:
     
     st.write("")
     st.write("")
+    st.write("Playlists and social networks are often considered to influence streams on Spotify. This section seeks to examine their potential role in the visibility and popularity of songs, to determine whether there is a link.")
+    
     st.write("")
     st.write("")
     
