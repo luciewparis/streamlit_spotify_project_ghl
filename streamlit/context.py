@@ -3,16 +3,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-
-# Set page title
-# st.set_page_config(page_title="Spotify Music Insights", layout="wide")
-
 # Spotify logo URL
 logo_url = "https://upload.wikimedia.org/wikipedia/commons/2/26/Spotify_logo_with_text.svg"
 
 # Welcome Message with Centered "Dashboard"
 st.markdown(
-    f"""
+    f"""\n
     <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
         <img src="{logo_url}" width="120">
         <h1 style="margin-bottom: 0;">Welcome to the Spotify Music Insights <br> <span style="display: block; text-align: center;">Dashboard</span></h1>
@@ -22,12 +18,12 @@ st.markdown(
 )
 
 # Header
-st.markdown("### Contexte")
+st.header("Contexte")
 
 # Context Section
+st.subheader("Spotify: The World's Leading Music Streaming Platform")
 st.markdown(
      """
-     **Spotify: The World's Leading Music Streaming Platform**  
     Launched in **2008**, Spotify has revolutionized the way people consume music by offering **on-demand streaming** with millions of songs, albums, and playlists.  
     Today, it is available in **over 180 countries**, connecting artists and listeners worldwide.  
 
@@ -35,15 +31,16 @@ st.markdown(
     - Over **700 million active users** (as of 2024).  
     - More than **265 million premium subscribers**.  
     - A vast library of **100+ million tracks** and **5M+ podcasts**.  
-    - AI-driven **personalized recommendations** through algorithms and curated playlists.  
-
-     **Impact on the Music Industry**  
-    Spotify has transformed music consumption, enabling artists to reach a **global audience** while shaping industry trends through **streaming analytics, playlist curation, and viral discoveries on social media platforms**.
+    - AI-driven **personalized recommendations** through algorithms and curated playlists.
     """
 )
 
-st.markdown("### Key Spotify Figures")
-st.markdown("#### Tracking Monthly Active Users & Premium Subscribers Over Time")
+st.subheader("Impact on the Music Industry")
+st.markdown("Spotify has transformed music consumption, enabling artists to reach a **global audience** while shaping industry trends through **streaming analytics, playlist curation, and viral discoveries on social media platforms**.")
+
+
+st.header("Key Spotify Figures")
+st.subheader("Tracking Monthly Active Users & Premium Subscribers Over Time")
 
 # Context
 st.markdown(

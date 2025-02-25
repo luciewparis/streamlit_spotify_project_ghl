@@ -1,3 +1,20 @@
 import streamlit as st
 
-st.title("Our team")
+st.title("Our team - TO DO")
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.image("https://www.kindpng.com/picc/m/52-525979_unknown-person-png-transparent-png.png", width=130)
+    st.subheader("Graziella")
+    st.markdown("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi.")
+
+with col2:
+    st.image("https://media.licdn.com/dms/image/v2/D4E03AQHafSa3ez2-4w/profile-displayphoto-shrink_400_400/B4EZP12RO9GYAg-/0/1734996465215?e=1746057600&v=beta&t=v2WhpS9a0n-hKNNJnuJb9UCUM_67GL-0qtirdQtKRV0", width=130)
+    st.subheader("Hind")
+    st.markdown("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi.")
+
+with col3:
+    st.image("https://media.licdn.com/dms/image/v2/D4E03AQEbDbvAwEKj3Q/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1718229579606?e=1746057600&v=beta&t=O_gLrwaq1ntPuyeavVEjH0HefEGiolVZDmP-es9TABc", width=130)
+    st.subheader("Lucie")
+    st.markdown("Passionate about **product management**, **data analytics** and **cats**, Lucie also loves bouldering (when not recovering from an injury), knitting and producing electronic music tracks that will not end up in the Top songs analyzed by other bootcamp students.")

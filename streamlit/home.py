@@ -5,10 +5,10 @@
 import streamlit as st
 
 # Home page = context
-context = st.Page("context.py", title="Context", icon=":material/dashboard:", default=True)
+context = st.Page("context.py", title="Context", icon=":material/dashboard:", default=True) # title and icon can be modified for each page 
 
 # Our analysis pages
-page1 = st.Page("pages/page1.py", title="Audio analysis", icon=":material/dashboard:")
+page1 = st.Page("pages/audio.py", title="Audio analysis", icon=":material/dashboard:")
 page2 = st.Page("pages/page2_Influence of Playlists and Social Networks on Streams.py", title="Social networks analysis", icon=":material/bug_report:")
 page3 = st.Page("pages/page3.py", title="Selection of artists for a festival", icon=":material/notification_important:")
 

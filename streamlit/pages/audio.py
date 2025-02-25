@@ -14,7 +14,7 @@ tab1, tab2, tab3 = st.tabs(["     Definitions     ", "     Profile overview     
 with tab1:
     st.title("Definitions of the 8 audio features used for our analysis")
     st.markdown("""We have leveraged the **8 audio features calculated by the Spotify data science teams**, and that allows us to analyze the audio aspect of tracks **in a more understandable (less technnical) way**.""")
-    st.info("Note: Initially available through Spotify API, the audio features endpoint is **deprecated** since 2024. We have therefore relied on **2023 data for our audio analysis part** (Kaggle dataset enriched with non-audio features from Spotify API).")
+    st.info("Note: Initially available through Spotify API, the audio features endpoint is **deprecated** since 2024. We have therefore relied on **2023 data (~ 1k tracks) for our audio analysis part** (Kaggle dataset enriched with non-audio features from Spotify API).")
     
     st.markdown("""
                  
@@ -160,7 +160,7 @@ with tab2:
     # and conclude
 
     # Context (for comparing TOP2 vs others)
-    st.markdown("")
+    st.markdown("**Objective**: compare different top Ns to identify how the audio profiles differ")
 
     # Takeaways for audio profile
     df_polar_compare = pd.concat([df_polar_2.loc[df_polar_2['metric']=="mean"], 
@@ -182,6 +182,11 @@ with tab2:
     st.plotly_chart(fig_polar)
 
     st.markdown("""
+                The audio profiles for the different TOP Ns are **very similar**:
+                - this shows quite a **homogenous average audio profile** among the most streamed songs on Spotify, whether this is about the TOP2 or TOP100
+                - this confirms the lack of correlation between number of streams and any of the 8 audio profiles (see more in *details* tab)
+                """)
+    st.markdown("""
                 
     Overall popular tracks have 
     - very **high** danceability 💃
@@ -193,12 +198,18 @@ with tab2:
     - and are not fully instrumental at all 🎼
     """)
            
-    st.markdown("It seems that the **most popular** tracks (as in most streamed) have the **most extreme values** e.g. highest danceability + lowest liveness")
+    st.info("It seems that the **most popular** tracks (as in most streamed) have the **most extreme values** e.g. highest danceability + lowest liveness, although not by much. **Only valence** seems to be much higher as the track is more streamed.")
 
 
     # part focusing on top Ns
-    st.header("Focus on TOP 2")
-    st.markdown("The range for the different audio features is however quite broad.")
+    st.header("A more detailed look at TOP Ns' audio profiles")
+    st.markdown("""
+                - Considering mix and max (and not only mean), we however observe that the range for the different audio features is quite broad, for all TOP Ns
+                - This again confirms the lack of correlation and therefore predictability between the number of stream a track will get and its audio features.
+                """)
+    
+    st.subheader("⚠️⚠️TO DO: UPDATE GRAPHS AS THEY DO NOT SHOW MIN/MAX !!!!!!!!!!⚠️⚠️")
+
     fig_polar = px.line_polar(df_polar_2, 
               r='value', 
               theta='audio_feature', 
@@ -207,7 +218,6 @@ with tab2:
               title = 'TOP2 tracks audio profile') 
     st.plotly_chart(fig_polar)
 
-    st.header("Focus on TOP 10")
     fig_polar = px.line_polar(df_polar_10, 
               r='value', 
               theta='audio_feature', 
@@ -216,7 +226,6 @@ with tab2:
               title = 'TOP10 tracks audio profile') 
     st.plotly_chart(fig_polar)
 
-    st.header("Focus on TOP 25")
     fig_polar = px.line_polar(df_polar_25, 
               r='value', 
               theta='audio_feature', 
@@ -225,7 +234,6 @@ with tab2:
               title = 'TOP25 tracks audio profile') 
     st.plotly_chart(fig_polar)
 
-    st.header("Focus on TOP 50")
     fig_polar = px.line_polar(df_polar_50, 
               r='value', 
               theta='audio_feature', 
@@ -234,7 +242,6 @@ with tab2:
               title = 'TOP50 tracks audio profile') 
     st.plotly_chart(fig_polar)
     
-    st.header("Focus on TOP 1000")
     fig_polar = px.line_polar(df_polar_all, 
               r='value', 
               theta='audio_feature', 
