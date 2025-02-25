@@ -13,77 +13,94 @@ tab1, tab2, tab3 = st.tabs(["     Definitions     ", "     Profile overview     
 ################# TAB 1 #################
 with tab1:
     st.title("Definitions of the 8 audio features used for our analysis")
-
+    st.markdown("""We have leveraged the **8 audio features calculated by the Spotify data science teams**, and that allows us to analyze the audio aspect of tracks **in a more understandable (less technnical) way**.""")
+    st.info("Note: Initially available through Spotify API, the audio features endpoint is **deprecated** since 2024. We have therefore relied on **2023 data for our audio analysis part** (Kaggle dataset enriched with non-audio features from Spotify API).")
+    
+    st.markdown("""
+                 
+        1. **Danceability** 💃
+        2. **Valence** (positive vibes) ☀️
+        3. **Energy** 💪
+        4. **Acousticness** 🎸
+        5. **Liveness** 🎤
+        6. **Speechiness** (amount of lyrics) 🗣
+        7. **Instrumentalness** 🎼
+        8. **BPM** 🎧 - not considered for further analysis
+        """)
 
     st.header("1. Danceability 💃")
     st.markdown("""Danceability describes **how suitable a track is for dancing** based on a combination of musical elements including tempo, rhythm stability, beat strength, and overall regularity. 
                 A value of 0.0 is least danceable and 100% is most danceable.""")
-    st.markdown("Example of a track with **high danceability (96%)**: #511")
+    st.markdown("🔝 Example of a track with **high danceability (96%)**: #511")
     st_player("https://youtu.be/pekzpzNCNDQ?si=WpQ-nqNY1GBOdtZA&t=68")
-    st.markdown("Example of a track with *low danceability (23%)*: #372")
+    st.markdown("⬇️ Example of a track with *low danceability (23%)*: #372")
     st_player("https://www.youtube.com/watch?v=v5ryZdpEHqM&t=9s")
 
     st.header("2. Speechiness 🗣")
     st.markdown("""Speechiness detects the **presence of spoken words** in a track. 
                 The more exclusively speech-like the recording (e.g. talk show, audio book, poetry), the closer to 100% the attribute value. Values above 0.66 describe tracks that are probably made entirely of spoken words. Values between 33% and 66% describe tracks that may contain both music and speech, either in sections or layered, including such cases as rap music. Values below 33% most likely represent music and other non-speech-like tracks.""")
-    st.markdown("Example of a track with **high Speechiness (64%)**: #856 ")
+    st.markdown("🔝 Example of a track with **high Speechiness (64%)**: #856 ")
     st_player("https://youtu.be/OZgQnRcGZXs?si=2znKGsUTzCvjPXUt&t=63")
-    st.markdown("Example of a track with *low Speechiness (2%)*: this track at position #61 has half the amount of lyrics of the above track")
+    st.markdown("⬇️ Example of a track with *low Speechiness (2%)*: this track at position #61 has half the amount of lyrics of the above track")
     st_player("https://youtu.be/RB-RcX5DS5A?si=EzygWpobFxjUylIt")
 
     st.header("3. Valence ☀️")
     st.markdown("""A measure from 0.0 to 100% describing the **musical positiveness** conveyed by a track. 
                 Tracks with high valence sound more positive (e.g. happy, cheerful, euphoric), while tracks with low valence sound more negative (e.g. sad, depressed, angry).""")
-    st.markdown("Example of a track with **high Valence (97%)**: #50")
+    st.markdown("🔝 Example of a track with **high Valence (97%)**: #50")
     st_player("https://youtu.be/dT2owtxkU8k?si=uEEVtwgJMZaReGcl&t=61")
-    st.markdown("Example of a track with *low Valence (4%)*: #248")
+    st.markdown("⬇️ Example of a track with *low Valence (4%)*: #248")
     st_player("https://youtu.be/sVx1mJDeUjY?si=95YACnVJdXILYP3E&t=46")
 
     st.header("4. Energy 💪")
     st.markdown("""Energy is a measure from 0 to 100 and represents a perceptual **measure of intensity and activity**. 
                 Typically, energetic tracks feel fast, loud, and noisy. For example, death metal has high energy, while a Bach prelude scores low on the scale. Perceptual features contributing to this attribute include dynamic range, perceived loudness, timbre, onset rate, and general entropy.""")
-    st.markdown("Example of a track with **high Energy (97%)**: #337")
+    st.markdown("🔝 Example of a track with **high Energy (97%)**: #337")
     st_player("https://youtu.be/w-sQRS-Lc9k?si=mSzmTEIok50eIBSE&t=16")
-    st.markdown("Example of a track with *low Energy (9%)*: #941")
+    st.markdown("⬇️ Example of a track with *low Energy (9%)*: #941")
     st_player("https://youtu.be/cW8VLC9nnTo?si=KvrQU423ch8OrYJF&t=8")
 
     st.header("5. Acousticness 🎸")
-    st.markdown("""A **confidence measure** from 0 to 100 of** whether the track is acoustic**. 
+    st.markdown("""A **confidence measure** from 0 to 100 of **whether the track is acoustic**. 
                 100% represents high confidence the track is acoustic.""")
-    st.markdown("Example of a track with **high Acousticness (97%)**: #83")
+    st.markdown("🔝 Example of a track with **high Acousticness (97%)**: #83")
     st_player("https://youtu.be/KtlgYxa6BMU?si=mmUDpp8ZXBn-FGn-&t=27")
-    st.markdown("Example of a track with *low Acousticness (0%)*: #34")
+    st.markdown("⬇️ Example of a track with *low Acousticness (0%)*: #34")
     st_player("https://youtu.be/tvTRZJ-4EyI?si=X2YEiJXjHDZxM2gU&t=7")
 
     st.header("6. Liveness 🎤")
-    st.markdown("""Detects the **presence of an audience** in the recording. 
+    st.markdown("""A **confidence measure** from 0 to 100 of whether there is the **presence of an audience** in the recording. 
                 Higher liveness values represent an increased probability that the track was performed live. A value above 80% provides strong likelihood that the track is live.""")
     # st.markdown("Comparing tracks with different levels of instrumentalness and seeing the low impact of this feature on a track's success, we will not consider this audio feature as we do not find it insightful for our analysis.")
-    st.markdown("Example of a track with **high Liveness (97%)**: #506")
-    st_player("https://youtu.be/r2ma8WPRppk?si=ZcG8nV_wlHvk5qFD&t=3")
-    st.markdown("Example of a track with *low Liveness (3%)*: #579")
+    st.markdown("🔝 Example of a track with **high Liveness (97%)**: #506")
+    st_player("https://youtu.be/r2ma8WPRppk?si=72Hc96FWqbqGYs3M&t=124")
+    st.markdown("⬇️ Example of a track with *low Liveness (3%)*: #579")
     st_player("https://youtu.be/8dJyRm2jJ-U?si=p3cIwh0yYFtv1yKL&t=58") 
 
-    st.header("7. Instrumentalness 🎼 - not considered for profiling (too uncertain)")
-    st.markdown("""A **confidence measure** predicting whether a track contains **no vocals**. 
+    st.header("7. Instrumentalness 🎼")
+    st.markdown("""A **confidence measure** predicting whether a track is **instrumental (NO vocals)**. 
                 'Ooh' and 'aah' sounds are treated as instrumental in this context. Rap or spoken word tracks are clearly 'vocal'. The closer the instrumentalness value is to 100%, the greater likelihood the track contains no vocal content. Values above 50% are intended to represent instrumental tracks, but confidence is higher as the value approaches 100%.""")
     # st.markdown("Comparing tracks with different levels of instrumentalness and seeing the low impact of this feature on a track's success, we will not consider this audio feature as we do not find it insightful for our analysis.")
-    st.markdown("Example of a track with **high Instrumentalness (91%)**: #392")
+    st.markdown("🔝 Example of a track with **high Instrumentalness (91%)**: #392")
     st_player("https://youtu.be/V8fYAAh5uuA?si=Bc-j6F34cU6bpmC2&t=36")
-    st.markdown("Example of a track with *low Instrumentalness (0%)*: #1")
+    st.markdown("⬇️ Example of a track with *low Instrumentalness (0%)*: #1")
     st_player("https://youtu.be/4NRXx6U8ABQ?si=Id0ZtDRkjwR-Ue3h&t=73")
 
     st.header("8. BPM 🎧 - not considered for profiling (too uncertain)")
     st.markdown("""The overall **estimated tempo** of a track in beats per minute (BPM). 
                 In musical terminology, tempo is the **speed** or pace of a given piece and derives directly from the average beat duration.""")
-    st.markdown("Example of a track with **high BPM (180)**: not in the top tracks but for reference only")
+    st.markdown("🔝 Example of a track with **high BPM (180)**: not in the top tracks but for reference only")
     st_player("https://youtu.be/wiBXrkka-YA?si=4N6fKFnGL2SPRp1o&t=94")
-    st.markdown("Example of a track with *low BPM (65)*: #781")
+    st.markdown("⬇️ Example of a track with *low BPM (65)*: #781")
     st_player("https://youtu.be/npu0F7n4M9Y?si=iVMLN7uPJTGKVkuR&t=12")
+    st.markdown("\nWe have chosen not to use this audio feature due to its uncertainly. For example, below tracks, respectively ranked #173 and #345 has been assigned the **highest BPMs of our dataset (206)** when in reality they are much slower:")
+    st_player("https://youtu.be/-BjZmE2gtdo?si=r-POCe1gXUyqoNnb&t=112")
+    st_player("https://youtu.be/bvWRMAU6V-c?si=YP44fZe5ndD7nidU&t=89")
+    st.info("It seems Spotify BPM is particularly wrong for 'exotic' tracks (raggaeton for ex) but also regular pop tracks (e.g. Taylor Swift). This is an issue shared by the community for more than 10 years. We also unfortunately could not leverage this field to infer tracks' genre, as genre is tightly linked to BPM/tempo.")
 
 # ################# TAB 2 #################
 with tab2:
-    st.title("What are the audio features of successful tracks in 2023?")
+    st.title("What does a successful track look like in 2023?")
 
    # Get initial data
     df = pd.read_csv('./data/2023_Most_Streamed_clean_api_genre.csv') # path should be relative to the root
