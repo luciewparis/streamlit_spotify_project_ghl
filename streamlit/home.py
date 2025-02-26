@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Set page title
+# Set page title - this should be the first Streamlit command
 st.set_page_config(page_title="Spotify Music Insights", layout="wide")
 
 # Spotify logo URL
@@ -41,43 +41,53 @@ st.markdown(
     """
 )
 
-st.markdown("### Key Spotify Figures")
-st.markdown("#### Tracking Monthly Active Users & Premium Subscribers Over Time")
+st.markdown("### Spotify Top 10 Insights")
 
-# Context
-st.markdown(
-    """
-    Spotify has become the **leading music streaming platform** with continuous growth in **monthly active users (MAUs) and premium subscribers**.
-    This graph illustrates the **evolution from 2011 to 2024**, showcasing Spotify’s impact on the global music industry.
-    """
-)
+# Create two columns for displaying the data side by side
+col1, col2 = st.columns(2)
 
-#source (https://www.statista.com/chart/15697/spotify-user-growth/)
-years = np.arange(2011, 2025) 
-monthly_active_users = [5, 10, 20, 30, 50, 75, 100, 150, 200, 250, 300, 400, 550, 678]  # 14 values
-premium_subscribers = [2, 5, 10, 15, 25, 40, 60, 80, 100, 140, 180, 220, 250, 265]  # 14 values
+# Top 10 Artists Data
+top_artists_data = {
+    'Artist': ['Bad Bunny', 'The Weeknd', 'Drake', 'Taylor Swift', 'Post Malone',
+               'Ed Sheeran', 'Ariana Grande', 'MUSIC LAB JPN', 'Olivia Rodrigo', 'Eminem'],
+    'Spotify Streams (in billions)': [37.05, 36.95, 34.96, 34.47, 26.14, 
+                                      24.01, 23.46, 22.87, 19.73, 18.88]
+}
 
+# Top 10 Tracks Data
+top_tracks_data = {
+    'Track': ['Blinding Lights', 'Blinding Lights', 'Shape of You', 'Shape of You', 
+              'Someone You Loved', 'Sunflower - Spider-Man: Into the Spider-Verse', 
+              'As It Was', 'As It Was', 'Starboy', 'One Dance'],
+    'Spotify Streams (in billions)': [4.28, 4.26, 3.91, 3.89, 3.43, 3.36, 3.30, 3.30, 3.29, 3.19]
+}
 
-fig, ax = plt.subplots(figsize=(10, 6))
+# Convert to DataFrames
+top_artists_df = pd.DataFrame(top_artists_data)
+top_tracks_df = pd.DataFrame(top_tracks_data)
 
-# Plot the data
-ax.plot(years, monthly_active_users, marker='o', linestyle='-', label="Monthly Active Users")
-ax.plot(years, premium_subscribers, marker='o', linestyle='-', color='darkgreen', label="Premium Subscribers")
+# Formatting the streams data to display two decimal places
+top_artists_df['Spotify Streams (in billions)'] = top_artists_df['Spotify Streams (in billions)'].map(lambda x: f"{x:.2f}")
+top_tracks_df['Spotify Streams (in billions)'] = top_tracks_df['Spotify Streams (in billions)'].map(lambda x: f"{x:.2f}")
 
-# Annotate last data points
-ax.text(2024, 678, "Dec. '24\n678M", verticalalignment='bottom', fontsize=10, fontweight='bold')
-ax.text(2024, 265, "Dec. '24\n265M", verticalalignment='bottom', color='darkgreen', fontsize=10, fontweight='bold')
+# Only keep Artist and Spotify Streams columns
+top_artists_df = top_artists_df[['Artist', 'Spotify Streams (in billions)']]
+top_tracks_df = top_tracks_df[['Track', 'Spotify Streams (in billions)']]
 
-# Titles and labels
-ax.set_title("Spotify Growth: Monthly Active Users & Premium Subscribers", fontsize=14, fontweight='bold')
-ax.set_xlabel("Year", fontsize=12)
-ax.set_ylabel("Users (in Millions)", fontsize=12)
-ax.set_xticks(np.arange(2011, 2025, step=2))
-ax.set_yticks(np.arange(0, 750, step=100))
-ax.legend()
-ax.grid(True, linestyle='--', alpha=0.6)
+# Display the top 10 artists table in the first column
+with col1:
+    st.markdown("#### Top 10 Most Streamed Artists")
+    st.dataframe(top_artists_df.style.set_properties(**{'background-color': 'lightblue',
+                                                        'color': 'black',
+                                                        'border': '1px solid black',
+                                                        'text-align': 'center'})
+                 .applymap(lambda val: 'font-weight: bold', subset=['Artist']), use_container_width=True)
 
-st.pyplot(fig)
-
-
-
+# Display the top 10 tracks table in the second column
+with col2:
+    st.markdown("#### Top 10 Most Streamed Tracks")
+    st.dataframe(top_tracks_df.style.set_properties(**{'background-color': 'lightgreen',
+                                                        'color': 'black',
+                                                        'border': '1px solid black',
+                                                        'text-align': 'center'})
+                 .applymap(lambda val: 'font-weight: bold', subset=['Track']), use_container_width=True)
