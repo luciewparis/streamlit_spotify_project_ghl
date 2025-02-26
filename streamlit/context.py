@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-st.set_page_config(page_title="Spotify Music Insights", layout="wide")
+#st.set_page_config(page_title="Spotify Music Insights", layout="wide")
 
 logo_url = "https://upload.wikimedia.org/wikipedia/commons/2/26/Spotify_logo_with_text.svg"
 
