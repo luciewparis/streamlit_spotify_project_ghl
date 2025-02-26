@@ -36,5 +36,3 @@ pg = st.navigation(
 
 st.set_page_config(page_title="Spotify Music Insights", layout="wide", page_icon=":material/edit:")
 pg.run()
-
-

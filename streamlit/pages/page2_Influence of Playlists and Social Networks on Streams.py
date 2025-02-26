@@ -6,7 +6,7 @@ import seaborn as sns
 import plotly.io as pio
 pio.templates.default = 'plotly' 
 
-st.markdown("<h1 style='text-align: center;'> Analysis of the Impact of Platforms and Social Networks on Spotify Streams</h1>",
+st.markdown("<h1 style='text-align: center;'> Analysis of the Impact of Music Platforms and Social Networks on Spotify Streams</h1>",
 unsafe_allow_html=True,)
 
 tabs = st.tabs(["       Spotify     ", "    Other platforms     ", "    YouTube     ", "    TikTok      "])
@@ -34,7 +34,7 @@ with tabs[0]:
     
     st.markdown('<h3 style="font-size: 20px;">Years with the Most Top Streamed Songs on Spotify</h3>', unsafe_allow_html=True)
 
-    #st.write('The most streamed titles are mainly from the last 3 to 5 years, which could be linked to the growing influence of social networks during this period. It would be worth investigating whether this link holds true.')
+    #st.write('The most streamed titles are mainly from the last 8 years, which could be linked to the growing influence of social networks during this period. It would be worth investigating whether this link holds true.')
     
     #convert the column in the good format 
     data["Release Date"] = pd.to_datetime(data["Release Date"], errors='coerce')
@@ -129,7 +129,7 @@ with tabs[0]:
 
 
 with tabs[1]:
-    st.header("Other Platforms")
+    st.header("Other Music Platforms")
     st.subheader('Exploring the correlation of Other Platforms on Spotify Streams: Apple Music and Deezer')
     st.image('https://www.apple.com/newsroom/images/product/apple-music/apple_music-update_hero_08242021_inline.jpg.large_2x.jpg', width=200)
     st.image('https://www.varactu.fr/wp-content/uploads/2023/11/LOGO-DEEZER-2023.jpg', width=160)
