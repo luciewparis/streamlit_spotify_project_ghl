@@ -7,7 +7,7 @@ col1, col2, col3 = st.columns(3, gap="large")
 with col1:
     st.image("https://www.kindpng.com/picc/m/52-525979_unknown-person-png-transparent-png.png", width=130)
     st.subheader("Graziella")
-    st.markdown("Interested in transitioning to a career in data after a background in HR, I love discovering new artists and watching basketball games.")
+    st.markdown("Interested in transitioning to a career in data after a background in HR, Graziella loves discovering new artists and watching basketball games.")
 
 with col2:
     st.image("https://media.licdn.com/dms/image/v2/D4E03AQHafSa3ez2-4w/profile-displayphoto-shrink_400_400/B4EZP12RO9GYAg-/0/1734996465215?e=1746057600&v=beta&t=v2WhpS9a0n-hKNNJnuJb9UCUM_67GL-0qtirdQtKRV0", width=130)
