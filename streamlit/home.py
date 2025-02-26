@@ -1,93 +1,38 @@
+# This file is to handle navigation in the app through the different pages
+# ex. page names
+# For more: see documentation: https://docs.streamlit.io/develop/concepts/multipage-apps/page-and-navigation    
+
+# icons > check: https://fonts.google.com/icons?icon.set=Material+Symbols&icon.style=Rounded
+
 import streamlit as st
-import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
 
-# Set page title - this should be the first Streamlit command
-st.set_page_config(page_title="Spotify Music Insights", layout="wide")
+# Home page = context
+context = st.Page("context.py", title="Context", icon=":material/home:", default=True) # title and icon can be modified for each page 
 
-# Spotify logo URL
-logo_url = "https://upload.wikimedia.org/wikipedia/commons/2/26/Spotify_logo_with_text.svg"
+# Our analysis pages
+page1 = st.Page("pages/page1.py", title="Audio analysis", icon=":material/discover_tune:")
+page2 = st.Page("pages/page2_Influence of Playlists and Social Networks on Streams.py", title="Social networks analysis", icon=":material/groups:")
+page3 = st.Page("pages/page3.py", title="Selection of artists for a festival", icon=":material/saved_search:")
+further = st.Page("pages/going_further.py", title="Going further", icon=":material/skip_next:")
 
-# Welcome Message with Centered "Dashboard"
-st.markdown(
-    f"""
-    <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
-        <img src="{logo_url}" width="120">
-        <h1 style="margin-bottom: 0;">Welcome to the Spotify Music Insights <br> <span style="display: block; text-align: center;">Dashboard</span></h1>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+# Our info pages
+toolkit = st.Page("infos/toolkit.py", title="Our toolkit", icon=":material/build:")
+method = st.Page("infos/method.py", title="Our methodology", icon=":material/account_tree:")
+team = st.Page("infos/team.py", title="About us", icon=":material/emoji_people:")
+feedback = st.Page("infos/feedback.py", title="Give us your feedback", icon=":material/assignment:")
 
-# Header
-st.markdown("### Contexte")
+# Run navigation
+# Without sections:
+# pg = st.navigation([context, page1, page2, page3, toolkit, method, team])
 
-# Context Section
-st.markdown(
-     """
-     **Spotify: The World's Leading Music Streaming Platform**  
-    Launched in **2008**, Spotify has revolutionized the way people consume music by offering **on-demand streaming** with millions of songs, albums, and playlists.  
-    Today, it is available in **over 180 countries**, connecting artists and listeners worldwide.  
+# Create sections
+pg = st.navigation(
+        {
+            "": [context],
+            "Analyses": [page1, page2, page3, further],
+            "About us": [toolkit, method, team, feedback]
+        }
+    )
 
-     **Why Spotify Matters?**  
-    - Over **700 million active users** (as of 2024).  
-    - More than **265 million premium subscribers**.  
-    - A vast library of **100+ million tracks** and **5M+ podcasts**.  
-    - AI-driven **personalized recommendations** through algorithms and curated playlists.  
-
-     **Impact on the Music Industry**  
-    Spotify has transformed music consumption, enabling artists to reach a **global audience** while shaping industry trends through **streaming analytics, playlist curation, and viral discoveries on social media platforms**.
-    """
-)
-
-st.markdown("### Spotify Top 10 Insights")
-
-# Create two columns for displaying the data side by side
-col1, col2 = st.columns(2)
-
-# Top 10 Artists Data
-top_artists_data = {
-    'Artist': ['Bad Bunny', 'The Weeknd', 'Drake', 'Taylor Swift', 'Post Malone',
-               'Ed Sheeran', 'Ariana Grande', 'MUSIC LAB JPN', 'Olivia Rodrigo', 'Eminem'],
-    'Spotify Streams (in billions)': [37.05, 36.95, 34.96, 34.47, 26.14, 
-                                      24.01, 23.46, 22.87, 19.73, 18.88]
-}
-
-# Top 10 Tracks Data
-top_tracks_data = {
-    'Track': ['Blinding Lights', 'Blinding Lights', 'Shape of You', 'Shape of You', 
-              'Someone You Loved', 'Sunflower - Spider-Man: Into the Spider-Verse', 
-              'As It Was', 'As It Was', 'Starboy', 'One Dance'],
-    'Spotify Streams (in billions)': [4.28, 4.26, 3.91, 3.89, 3.43, 3.36, 3.30, 3.30, 3.29, 3.19]
-}
-
-# Convert to DataFrames
-top_artists_df = pd.DataFrame(top_artists_data)
-top_tracks_df = pd.DataFrame(top_tracks_data)
-
-# Formatting the streams data to display two decimal places
-top_artists_df['Spotify Streams (in billions)'] = top_artists_df['Spotify Streams (in billions)'].map(lambda x: f"{x:.2f}")
-top_tracks_df['Spotify Streams (in billions)'] = top_tracks_df['Spotify Streams (in billions)'].map(lambda x: f"{x:.2f}")
-
-# Only keep Artist and Spotify Streams columns
-top_artists_df = top_artists_df[['Artist', 'Spotify Streams (in billions)']]
-top_tracks_df = top_tracks_df[['Track', 'Spotify Streams (in billions)']]
-
-# Display the top 10 artists table in the first column
-with col1:
-    st.markdown("#### Top 10 Most Streamed Artists")
-    st.dataframe(top_artists_df.style.set_properties(**{'background-color': 'lightblue',
-                                                        'color': 'black',
-                                                        'border': '1px solid black',
-                                                        'text-align': 'center'})
-                 .applymap(lambda val: 'font-weight: bold', subset=['Artist']), use_container_width=True)
-
-# Display the top 10 tracks table in the second column
-with col2:
-    st.markdown("#### Top 10 Most Streamed Tracks")
-    st.dataframe(top_tracks_df.style.set_properties(**{'background-color': 'lightgreen',
-                                                        'color': 'black',
-                                                        'border': '1px solid black',
-                                                        'text-align': 'center'})
-                 .applymap(lambda val: 'font-weight: bold', subset=['Track']), use_container_width=True)
+st.set_page_config(page_title="Spotify Music Insights", layout="wide", page_icon=":material/edit:")
+pg.run()
