@@ -2,7 +2,6 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
-import os
 import seaborn as sns
 import plotly.express as px
 import plotly.graph_objects as go
@@ -14,7 +13,7 @@ tab1, tab2, tab3 = st.tabs(["     Definitions     ", "     Profile overview     
 with tab1:
     st.title("Definitions of the 8 audio features used for our analysis")
     st.markdown("""We have leveraged the **8 audio features calculated by the Spotify data science teams**, and that allows us to analyze the audio aspect of tracks **in a more understandable (less technnical) way**.""")
-    st.info("Note: Initially available through Spotify API, the audio features endpoint is **deprecated** since 2024. We have therefore relied on **2023 data (~ 1k tracks) for our audio analysis part** (Kaggle dataset enriched with non-audio features from Spotify API).")
+    st.info("Note: Initially available through Spotify API, the audio features endpoint is **deprecated** since 2024. We have therefore relied on **2023 data (~ 1k most streamed tracks) for our audio analysis part** (Kaggle dataset enriched with non-audio features from Spotify API).")
     
     st.markdown("""
                  
@@ -38,7 +37,7 @@ with tab1:
 
     st.header("2. Speechiness 🗣")
     st.markdown("""Speechiness detects the **presence of spoken words** in a track. 
-                The more exclusively speech-like the recording (e.g. talk show, audio book, poetry), the closer to 100% the attribute value. Values above 0.66 describe tracks that are probably made entirely of spoken words. Values between 33% and 66% describe tracks that may contain both music and speech, either in sections or layered, including such cases as rap music. Values below 33% most likely represent music and other non-speech-like tracks.""")
+                The more exclusively speech-like the recording (e.g. talk show, audio book, poetry), the closer to 100% the attribute value. Values above 0.66 describe tracks that are probably made entirely of spoken words. Values **between 33% and 66%** describe tracks that may contain **both music and speech**, either in sections or layered, including such cases as **rap** music. Values below 33% most likely represent music and other non-speech-like tracks.""")
     st.markdown("🔝 Example of a track with **high Speechiness (64%)**: #856 ")
     st_player("https://youtu.be/OZgQnRcGZXs?si=2znKGsUTzCvjPXUt&t=63")
     st.markdown("⬇️ Example of a track with *low Speechiness (2%)*: this track at position #61 has half the amount of lyrics of the above track")
@@ -84,7 +83,7 @@ with tab1:
     st.markdown("🔝 Example of a track with **high Instrumentalness (91%)**: #392")
     st_player("https://youtu.be/V8fYAAh5uuA?si=Bc-j6F34cU6bpmC2&t=36")
     st.markdown("⬇️ Example of a track with *low Instrumentalness (0%)*: #1")
-    st_player("https://youtu.be/4NRXx6U8ABQ?si=Id0ZtDRkjwR-Ue3h&t=73")
+    st_player("https://youtu.be/4NRXx6U8ABQ?si=Id0ZtDRkjwR-Ue3h&t=73") 
 
     st.header("8. BPM 🎧 - not considered for profiling (too uncertain)")
     st.markdown("""The overall **estimated tempo** of a track in beats per minute (BPM). 
@@ -114,10 +113,6 @@ with tab2:
     df_top = df.iloc[:2]
     df_polar_2.loc[df_polar_2.index.isin(range(7,14)),'metric'] = 'max'
     df_polar_2.loc[df_polar_2.index.isin(range(14,21)),'metric'] = 'min'
-    df_polar_2 = pd.DataFrame({
-        'audio_feature': ['speechiness_%', 'danceability_%', 'valence_%', 'energy_%', 'acousticness_%', 'liveness_%', 'instrumentalness_%'],
-        'metric': ['mean', 'mean','mean','mean','mean','mean','mean' ]
-    })
 
     def get_metric(row):
         if row['metric'] == 'mean':
@@ -130,6 +125,7 @@ with tab2:
             return "metric not found"
     
     df_polar_2['value'] = df_polar_2.apply(get_metric, axis =1)
+
 
     # define top10
     df_polar_10 = df_polar_2.copy()
@@ -172,43 +168,42 @@ with tab2:
                                 'top10', 'top10','top10','top10','top10','top10','top10',
                                 'top50', 'top50','top50','top50','top50','top50','top50',
                                 'top1000','top1000','top1000','top1000','top1000','top1000','top1000']
-    
+          
     fig_polar = px.line_polar(df_polar_compare, 
               r='value', 
               theta='audio_feature', 
+              range_r=[0,100],
               color='top N', 
               line_close=True, 
-              title = 'Audio profiles per TOP N') 
+              title = 'Audio profiles per TOP N (focusing on mean)') 
     st.plotly_chart(fig_polar)
 
     st.markdown("""
-                The audio profiles for the different TOP Ns are **very similar**:
-                - this shows quite a **homogenous average audio profile** among the most streamed songs on Spotify, whether this is about the TOP2 or TOP100
-                - this confirms the lack of correlation between number of streams and any of the 8 audio profiles (see more in *details* tab)
-                """)
-    st.markdown("""
-                
-    Overall popular tracks have 
-    - very **high** danceability 💃
-    - very **high** valence (positive vibes) ☀️
-    - very **high** energy 💪
-    - and a very **low** acousticness 🎸
-    - a very **low** liveness 🎤
-    - a very **low** speechiness (not too many lyrics) 🗣
-    - and are not fully instrumental at all 🎼
+                #### 🔍 **Key Insights:**  
+                On average, popular tracks have 
+                - **high** danceability 💃 (60-70%)
+                - **medium to high** valence (positive vibes) ☀️ (50-65%)
+                - **high** energy 💪 (60-70%)
+                - **low** acousticness (likelihood to be an acoustic track) 🎸(~30%)
+                - very **low** liveness (likelihood to be performed live) 🎤 (~15%)
+                - very **low** speechiness (not too many lyrics) 🗣 (~10%)
+                - and **no instrumentalness** (likelihood to contain no vocals) 🎼 (0%)
     """)
-           
-    st.info("It seems that the **most popular** tracks (as in most streamed) have the **most extreme values** e.g. highest danceability + lowest liveness, although not by much. **Only valence** seems to be much higher as the track is more streamed.")
 
+    st.info("""
+                We can also note that the audio profiles for the different TOP Ns are **very similar**:
+                - this shows quite a **homogenous average audio profile** among the most streamed songs on Spotify, whether this is about the TOP2 or TOP100
+                - even if (only) **valence** seems to be higher as the track is more streamed...
+                - ...there is no clear correlation between number of streams and any of the 8 audio profiles (see correlation matrix in *details* tab: highest correlation score is -11%!)
+                """)
+ 
 
     # part focusing on top Ns
     st.header("A more detailed look at TOP Ns' audio profiles")
     st.markdown("""
-                - Considering mix and max (and not only mean), we however observe that the range for the different audio features is quite broad, for all TOP Ns
-                - This again confirms the lack of correlation and therefore predictability between the number of stream a track will get and its audio features.
+                - Considering **min** and **max** (and not only mean), we however observe that the range for the different audio features is quite **broad**, for all TOP Ns
+                - This again shows the lack of correlation and therefore predictability between the number of streams a track will get and its audio features.
                 """)
-    
-    st.subheader("⚠️⚠️TO DO: UPDATE GRAPHS AS THEY DO NOT SHOW MIN/MAX !!!!!!!!!!⚠️⚠️")
 
     fig_polar = px.line_polar(df_polar_2, 
               r='value', 
@@ -216,7 +211,9 @@ with tab2:
               color='metric', 
               line_close=True, 
               title = 'TOP2 tracks audio profile') 
+    
     st.plotly_chart(fig_polar)
+
 
     fig_polar = px.line_polar(df_polar_10, 
               r='value', 
@@ -250,250 +247,270 @@ with tab2:
               title = 'All tracks audio profile') 
     st.plotly_chart(fig_polar)
 
+    st.markdown("While the mean remains around the same range, the min keeps getting lower and the max keeps getting higher as N increases.") 
+                
+    st.markdown("""
+                #### 🔍 **Key Insights:**  
+                - This makes sense since more tracks are included in the TOP Ns...
+                - ...but this also reassures us on the (relative) **diversity** of the most popular songs on Spotify
+                - although, speechiness and instrumentalness remain in more narrow ranges, still i.e **most streamed tracks are songs with a moderate amount of lyrics**
+                - Also, **the decreasing mins seem to balance the increasing maxs**.
+
+                """)
+
 # ################# TAB 3 #################
 with tab3:
     df_top10=df.iloc[:10]   
 
     st.header("Approach details")
-    st.markdown("The analysis has been conducted on the **TOP 1000 most streamed songs as of end of year 2023**. It is a different dataset than the one used for the other sections, that use a more recent dataset. Spotify API however no longer provides audio features information since 2024.")
-
+    st.markdown("Reminder: The analysis has been conducted on the **TOP 1000 most streamed songs as of end of year 2023**.")
     st.info(
         "Note that **no strong correlation was found between the audio features and the number of streams**, resulting in quite similar patterns for most tracks of the TOP 1000 (number of tracks in our dataset)."
     )
 
+
     # plt.figure(figsize=(15,15))
+    # fig, ax = plt.subplots(figsize=(12, 6)) # should solve the issue with "AttributeError: 'Axes' object has no attribute 'savefig'" ?!
     # fig = sns.heatmap(df[['streams','speechiness_%', 'danceability_%', 'liveness_%', 'instrumentalness_%', 'valence_%', 'energy_%', 'acousticness_%', 'bpm']] .corr(),    
     #         annot=True)
     # st.pyplot(fig)
+
     image_path = "./streamlit/images/correlation_matrix.png" 
     st.image(image_path)
 
     st.markdown("The strongest correlation for number of streams is with speechiness, with -0.11% only.")
 
-    st.header("Danceability - details")
+    st.header("💃 Danceability - details")
     st.markdown("Most popular songs are **very suitable for dancing, with a danceability between 60 and 80%**, and a mean/median around **68%**. However, contrary to instrumentalness and speechiness which had a very narrow range, danceability has a broader range, with some TOP3 songs having a danceability lower than average, at 50% ('Blinding lights', 'Someone you loved')")
 
-    fig = px.histogram(df['danceability_%'], title='Distribution of danceability', nbins=30)
-    st.plotly_chart(fig)
-    fig = px.box(df['danceability_%'], title='Distribution of danceability')
-    fig.show()
-    st.plotly_chart(fig)
-    
-    df_line_mean_dance = pd.Series(np.full(10, df['danceability_%'].mean()))
-    df_line_median_dance = pd.Series(np.full(10, df['danceability_%'].median()))
+    with st.expander("See graphs"):
+        fig = px.histogram(df['danceability_%'], title='Distribution of danceability', nbins=30)
+        st.plotly_chart(fig)
+        fig = px.box(df['danceability_%'], title='Distribution of danceability')
+        fig.show()
+        st.plotly_chart(fig)
+        
+        df_line_mean_dance = pd.Series(np.full(10, df['danceability_%'].mean()))
+        df_line_median_dance = pd.Series(np.full(10, df['danceability_%'].median()))
 
-    fig = px.bar(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
-                y=df_top10['danceability_%'], 
-                labels={'x':'track name', 'y':'danceability'})
-    fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
-                            y=df_line_mean_dance, 
-                            mode = 'lines', 
-                            marker_color='orange',
-                            name="danceability mean"))
-    fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
-                            y=df_line_median_dance, 
-                            mode = 'lines', 
-                            marker_color='blue',
-                            name="danceability median"))
-    fig.update_layout(height=600, title='Danceability for the TOP10 tracks, compared to mean and median')
-    st.plotly_chart(fig)
+        fig = px.bar(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
+                    y=df_top10['danceability_%'], 
+                    labels={'x':'track name', 'y':'danceability'})
+        fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
+                                y=df_line_mean_dance, 
+                                mode = 'lines', 
+                                marker_color='orange',
+                                name="danceability mean"))
+        fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
+                                y=df_line_median_dance, 
+                                mode = 'lines', 
+                                marker_color='blue',
+                                name="danceability median"))
+        fig.update_layout(height=600, title='Danceability for the TOP10 tracks, compared to mean and median')
+        st.plotly_chart(fig)
 
-    st.header("Speechiness - details")
+    st.header("🗣 Speechiness - details")
     st.markdown("Most popular songs have a **low speechiness, between 4-11% (median: 6%)**, which can be considered as almost with no spoken words. Note that the mean (10%) is skewed by several outliers with higher speechiness. ")
     
-    fig = px.histogram(df['speechiness_%'], title='Distribution of speechiness')
-    st.plotly_chart(fig)
+    with st.expander("See graphs"):
+        fig = px.histogram(df['speechiness_%'], title='Distribution of speechiness')
+        st.plotly_chart(fig)
 
-    fig = px.box(df['speechiness_%'], title='Distribution of speechiness')
-    st.plotly_chart(fig)
+        fig = px.box(df['speechiness_%'], title='Distribution of speechiness')
+        st.plotly_chart(fig)
 
-    df_line_mean_speech = pd.Series(np.full(10, df['speechiness_%'].mean()))
-    df_line_median_speech = pd.Series(np.full(10, df['speechiness_%'].median()))
+        df_line_mean_speech = pd.Series(np.full(10, df['speechiness_%'].mean()))
+        df_line_median_speech = pd.Series(np.full(10, df['speechiness_%'].median()))
 
-    fig = px.bar(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
-                y=df_top10['speechiness_%'], 
-                labels={'x':'track name', 'y':'speechiness'})
+        fig = px.bar(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
+                    y=df_top10['speechiness_%'], 
+                    labels={'x':'track name', 'y':'speechiness'})
 
-    fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
-                            y=df_line_mean_speech, 
-                            mode = 'lines', 
-                            marker_color='orange',
-                            name="speechiness mean"))
+        fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
+                                y=df_line_mean_speech, 
+                                mode = 'lines', 
+                                marker_color='orange',
+                                name="speechiness mean"))
 
-    fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
-                            y=df_line_median_speech, 
-                            mode = 'lines', 
-                            marker_color='blue',
-                            name="speechiness median"))
+        fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
+                                y=df_line_median_speech, 
+                                mode = 'lines', 
+                                marker_color='blue',
+                                name="speechiness median"))
 
 
-    fig.update_layout(height=600, title='Speechiness for the TOP10 tracks, compared to mean and median')
-    st.plotly_chart(fig)
+        fig.update_layout(height=600, title='Speechiness for the TOP10 tracks, compared to mean and median')
+        st.plotly_chart(fig)
 
-    st.header("Valence - details")
+    st.header("☀️ Valence - details")
     st.markdown("Valence distribution is quite even and symmetrical around the **mean/median 51%**. Most values are **between 32% and 70%**. Popular songs can either have high valence and convey positive energy, or have low valence, conveying sad vibes, as well as neutral valence. This makes sense as we tend to listen to songs in various contexts (to feel energized and pumped, comforted when sad, to focus...). We find higher and lower than average valence tracks among the TOP10, which ranges between more extreme values: from 36% to 93%.")
 
-    fig = px.histogram(df['valence_%'], title='Distribution of valence')
-    st.plotly_chart(fig)
+    with st.expander("See graphs"):
+        fig = px.histogram(df['valence_%'], title='Distribution of valence')
+        st.plotly_chart(fig)
 
-    fig = px.box(df['valence_%'], title='Distribution of valence')
-    st.plotly_chart(fig)
+        fig = px.box(df['valence_%'], title='Distribution of valence')
+        st.plotly_chart(fig)
 
-    df_line_mean_valence = pd.Series(np.full(10, df['valence_%'].mean()))
-    df_line_median_valence = pd.Series(np.full(10, df['valence_%'].median()))
+        df_line_mean_valence = pd.Series(np.full(10, df['valence_%'].mean()))
+        df_line_median_valence = pd.Series(np.full(10, df['valence_%'].median()))
 
-    fig = px.bar(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
-                y=df_top10['valence_%'], 
-                labels={'x':'track name', 'y':'valence'})
+        fig = px.bar(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
+                    y=df_top10['valence_%'], 
+                    labels={'x':'track name', 'y':'valence'})
 
-    fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
-                            y=df_line_mean_valence, 
-                            mode = 'lines', 
-                            marker_color='orange',
-                            name="valence mean"))
+        fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
+                                y=df_line_mean_valence, 
+                                mode = 'lines', 
+                                marker_color='orange',
+                                name="valence mean"))
 
-    fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
-                            y=df_line_median_valence, 
-                            mode = 'lines', 
-                            marker_color='blue',
-                            name="valence median"))
+        fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
+                                y=df_line_median_valence, 
+                                mode = 'lines', 
+                                marker_color='blue',
+                                name="valence median"))
 
-    fig.update_layout(height=600, title='Valence for the TOP10 tracks, compared to mean and median')
-    st.plotly_chart(fig)
+        fig.update_layout(height=600, title='Valence for the TOP10 tracks, compared to mean and median')
+        st.plotly_chart(fig)
 
-    st.header("Energy - details")
+    st.header("💪 Energy - details")
     st.markdown("Most popular songs have a rather **high energy, between 53% and 77%**. Mean and median are close, at around **65%**. TOP10 tracks have values below and above average, from 41% ('Someone you love') to 80% ('Blinding lights') !")
     
-    fig = px.histogram(df['energy_%'], title='Distribution of energy')
-    st.plotly_chart(fig)
+    with st.expander("See graphs"):
+        fig = px.histogram(df['energy_%'], title='Distribution of energy')
+        st.plotly_chart(fig)
 
-    fig = px.box(df['energy_%'], title='Distribution of energy')
-    st.plotly_chart(fig)
+        fig = px.box(df['energy_%'], title='Distribution of energy')
+        st.plotly_chart(fig)
 
-    df_line_mean_energy = pd.Series(np.full(10, df['energy_%'].mean()))
-    df_line_median_energy = pd.Series(np.full(10, df['energy_%'].median()))
+        df_line_mean_energy = pd.Series(np.full(10, df['energy_%'].mean()))
+        df_line_median_energy = pd.Series(np.full(10, df['energy_%'].median()))
 
-    fig = px.bar(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
-                y=df_top10['energy_%'], 
-                labels={'x':'track name', 'y':'energy'})
+        fig = px.bar(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
+                    y=df_top10['energy_%'], 
+                    labels={'x':'track name', 'y':'energy'})
 
-    fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
-                            y=df_line_mean_energy, 
-                            mode = 'lines', 
-                            marker_color='orange',
-                            name="energy mean"))
+        fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
+                                y=df_line_mean_energy, 
+                                mode = 'lines', 
+                                marker_color='orange',
+                                name="energy mean"))
 
-    fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
-                            y=df_line_median_energy, 
-                            mode = 'lines', 
-                            marker_color='blue',
-                            name="energy median"))
+        fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
+                                y=df_line_median_energy, 
+                                mode = 'lines', 
+                                marker_color='blue',
+                                name="energy median"))
 
 
-    fig.update_layout(height=600, title='Energy for the TOP10 tracks, compared to mean and median')
-    st.plotly_chart(fig)
+        fig.update_layout(height=600, title='Energy for the TOP10 tracks, compared to mean and median')
+        st.plotly_chart(fig)
 
-    st.header("Acousticness - details")
+    st.header("🎸 Acousticness - details")
     st.markdown("Most popular songs have acousticness values within a broad range **from 6 to 43%, with a median at 18%**. With half of the TOP10 tracks above average, and half below, this audio feature is clearly not a parameter telling us if a track will be more popular or not.")
 
-    fig = px.histogram(df['acousticness_%'], title='Distribution of acousticness')
-    st.plotly_chart(fig)
+    with st.expander("See graphs"): 
+        fig = px.histogram(df['acousticness_%'], title='Distribution of acousticness')
+        st.plotly_chart(fig)
 
-    fig = px.box(df['acousticness_%'], title='Distribution of acousticness')
-    st.plotly_chart(fig)
+        fig = px.box(df['acousticness_%'], title='Distribution of acousticness')
+        st.plotly_chart(fig)
 
-    df_line_mean_acoustic = pd.Series(np.full(10, df['acousticness_%'].mean()))
-    df_line_median_acoustic = pd.Series(np.full(10, df['acousticness_%'].median()))
+        df_line_mean_acoustic = pd.Series(np.full(10, df['acousticness_%'].mean()))
+        df_line_median_acoustic = pd.Series(np.full(10, df['acousticness_%'].median()))
 
-    fig = px.bar(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
-                y=df_top10['acousticness_%'], 
-                labels={'x':'track name', 'y':'acousticness'})
+        fig = px.bar(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
+                    y=df_top10['acousticness_%'], 
+                    labels={'x':'track name', 'y':'acousticness'})
 
-    fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
-                            y=df_line_mean_acoustic, 
-                            mode = 'lines', 
-                            marker_color='orange',
-                            name="acousticness mean"))
+        fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
+                                y=df_line_mean_acoustic, 
+                                mode = 'lines', 
+                                marker_color='orange',
+                                name="acousticness mean"))
 
-    fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
-                            y=df_line_median_acoustic, 
-                            mode = 'lines', 
-                            marker_color='blue',
-                            name="acousticness median"))
+        fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
+                                y=df_line_median_acoustic, 
+                                mode = 'lines', 
+                                marker_color='blue',
+                                name="acousticness median"))
 
 
-    fig.update_layout(height=600, title='Acousticness for the TOP10 tracks, compared to mean and median')
-    st.plotly_chart(fig)
+        fig.update_layout(height=600, title='Acousticness for the TOP10 tracks, compared to mean and median')
+        st.plotly_chart(fig)
 
-    st.header("Liveness - details")
+    st.header("🎤Liveness - details")
     st.markdown("Most popular songs have a **low liveness, between 10-24% (median at 12%)**, showing studio tracks make more streams. Only 2 tracks of the TOP10 have a higher liveness than average with 'One Dance' achieving even 35%. However, those are all studio tracks, and almost no popular song is live (only 5 tracks, i.e. 0.5% have a liveness >80%).")
     
-    fig = px.histogram(df['liveness_%'], title='Distribution of liveness')
-    st.plotly_chart(fig)
+    with st.expander("See graphs"):
+        fig = px.histogram(df['liveness_%'], title='Distribution of liveness')
+        st.plotly_chart(fig)
 
-    fig = px.box(df['liveness_%'], title='Distribution of liveness')
-    st.plotly_chart(fig)
+        fig = px.box(df['liveness_%'], title='Distribution of liveness')
+        st.plotly_chart(fig)
 
-    df_line_mean_live = pd.Series(np.full(10, df['liveness_%'].mean()))
-    df_line_median_live = pd.Series(np.full(10, df['liveness_%'].median()))
+        df_line_mean_live = pd.Series(np.full(10, df['liveness_%'].mean()))
+        df_line_median_live = pd.Series(np.full(10, df['liveness_%'].median()))
 
-    fig = px.bar(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
-                y=df_top10['liveness_%'], 
-                labels={'x':'track name', 'y':'liveness'})
+        fig = px.bar(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
+                    y=df_top10['liveness_%'], 
+                    labels={'x':'track name', 'y':'liveness'})
 
-    fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
-                            y=df_line_mean_live, 
-                            mode = 'lines', 
-                            marker_color='orange',
-                            name="liveness mean"))
+        fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
+                                y=df_line_mean_live, 
+                                mode = 'lines', 
+                                marker_color='orange',
+                                name="liveness mean"))
 
-    fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
-                            y=df_line_median_live, 
-                            mode = 'lines', 
-                            marker_color='blue',
-                            name="liveness median"))
+        fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
+                                y=df_line_median_live, 
+                                mode = 'lines', 
+                                marker_color='blue',
+                                name="liveness median"))
 
 
-    fig.update_layout(height=600, title='Liveness for the TOP10 tracks, compared to mean and median')
-    st.plotly_chart(fig)
+        fig.update_layout(height=600, title='Liveness for the TOP10 tracks, compared to mean and median')
+        st.plotly_chart(fig)
 
-    st.header("Instrumentalness - not considered for profiling (too uncertain)")
+    st.header("🎼Instrumentalness - details")
     st.markdown("Most popular songs contain vocals (0% instrumentalness). **The TOP10 songs are 100% vocal**. This makes sense with the speechiness % analyzed above: popular songs have vocals, but not too much.")
     
-    fig = px.histogram(df['instrumentalness_%'], title='Distribution of instrumentalness')
-    st.plotly_chart(fig)
+    with st.expander("See graphs"):
+        fig = px.histogram(df['instrumentalness_%'], title='Distribution of instrumentalness')
+        st.plotly_chart(fig)
 
-    fig = px.box(df['instrumentalness_%'], title='Distribution of instrumentalness')
-    st.plotly_chart(fig)
+        fig = px.box(df['instrumentalness_%'], title='Distribution of instrumentalness')
+        st.plotly_chart(fig)
 
-    st.header("BPM - not considered for profiling (too uncertain)")
-    st.markdown("Most popular songs have a BPM **between 100 and 140, with a median/mean at around 121**. The TOP10 tracks range between 90 and 186, about half above average, and the other half below. This indicates indeed that BPM is not a significant factor to predict a track's success, although it is a safe choice to be within the standard range mentioned above. - We will deep dive more into this audio feature when looking at the genre.")
-    
-    fig = px.histogram(df['bpm'], title='Distribution of bpm')
-    st.plotly_chart(fig)
+        st.header("BPM - not considered for profiling (too uncertain)")
+        st.markdown("Most popular songs have a BPM **between 100 and 140, with a median/mean at around 121**. The TOP10 tracks range between 90 and 186, about half above average, and the other half below. This indicates indeed that BPM is not a significant factor to predict a track's success, although it is a safe choice to be within the standard range mentioned above. - We will deep dive more into this audio feature when looking at the genre.")
+        
+        fig = px.histogram(df['bpm'], title='Distribution of bpm')
+        st.plotly_chart(fig)
 
-    fig = px.box(df['bpm'], title='Distribution of bpm')
-    st.plotly_chart(fig)
+        fig = px.box(df['bpm'], title='Distribution of bpm')
+        st.plotly_chart(fig)
 
-    df_line_mean_bpm = pd.Series(np.full(10, df['bpm'].mean()))
-    df_line_median_bpm = pd.Series(np.full(10, df['bpm'].median()))
+        df_line_mean_bpm = pd.Series(np.full(10, df['bpm'].mean()))
+        df_line_median_bpm = pd.Series(np.full(10, df['bpm'].median()))
 
-    fig = px.bar(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
-                y=df_top10['bpm'], 
-                labels={'x':'track name', 'y':'bpm'})
+        fig = px.bar(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
+                    y=df_top10['bpm'], 
+                    labels={'x':'track name', 'y':'bpm'})
 
-    fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
-                            y=df_line_mean_bpm, 
-                            mode = 'lines', 
-                            marker_color='orange',
-                            name="bpm mean"))
+        fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
+                                y=df_line_mean_bpm, 
+                                mode = 'lines', 
+                                marker_color='orange',
+                                name="bpm mean"))
 
-    fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
-                            y=df_line_median_bpm, 
-                            mode = 'lines', 
-                            marker_color='blue',
-                            name="bpm median"))
+        fig.add_traces(go.Scatter(x=df_top10['track_name']+' ('+df_top10['artist(s)_name']+')', 
+                                y=df_line_median_bpm, 
+                                mode = 'lines', 
+                                marker_color='blue',
+                                name="bpm median"))
 
 
-    fig.update_layout(height=600, title='Bpm for the TOP10 tracks, compared to mean and median')
-    st.plotly_chart(fig)
+        fig.update_layout(height=600, title='Bpm for the TOP10 tracks, compared to mean and median')
+        st.plotly_chart(fig)

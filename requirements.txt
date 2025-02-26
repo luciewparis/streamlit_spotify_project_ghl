@@ -7,3 +7,4 @@ seaborn
 streamlit_player
 altair<5
 statsmodels
+streamlit_extras

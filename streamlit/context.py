@@ -6,47 +6,55 @@ import numpy as np
 # Spotify logo URL
 logo_url = "https://upload.wikimedia.org/wikipedia/commons/2/26/Spotify_logo_with_text.svg"
 
-# Welcome Message with Centered "Dashboard"
-st.markdown(
-    f"""\n
-    <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
-        <img src="{logo_url}" width="120">
-        <h1 style="margin-bottom: 0;">Welcome to the Spotify Music Insights <br> <span style="display: block; text-align: center;">Dashboard</span></h1>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+# # Welcome Message with Centered "Dashboard"
+# st.markdown(
+#     f"""\n
+#     <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
+#         <img src="{logo_url}" width="120">
+#         <h1 style="margin-bottom: 0;">Welcome to the Spotify Music Insights <br> <span style="display: block; text-align: center;">Dashboard</span></h1>
+#     </div>
+#     """,
+#     unsafe_allow_html=True
+# )
+
+left_co, cent_co,last_co = st.columns(3)
+with cent_co:
+    st.image(logo_url)
+
+st.title("Welcome to the Spotify Music Insights Dashboard")
 
 # Header
-st.header("Contexte")
+st.header("1. Context")
 
 # Context Section
-st.subheader("Spotify: The World's Leading Music Streaming Platform")
 st.markdown(
      """
+     ### Spotify: The World's Leading Music Streaming Platform
     Launched in **2008**, Spotify has revolutionized the way people consume music by offering **on-demand streaming** with millions of songs, albums, and playlists.  
     Today, it is available in **over 180 countries**, connecting artists and listeners worldwide.  
 
-     **Why Spotify Matters?**  
+     ### Why Spotify matters?
     - Over **700 million active users** (as of 2024).  
     - More than **265 million premium subscribers**.  
     - A vast library of **100+ million tracks** and **5M+ podcasts**.  
     - AI-driven **personalized recommendations** through algorithms and curated playlists.
+
+    ### Impact on the Music Industry
+    Spotify has transformed music consumption, enabling artists to reach a **global audience** while shaping industry trends through **streaming analytics, playlist curation, and viral discoveries on social media platforms**.
+
     """
 )
 
-st.subheader("Impact on the Music Industry")
-st.markdown("Spotify has transformed music consumption, enabling artists to reach a **global audience** while shaping industry trends through **streaming analytics, playlist curation, and viral discoveries on social media platforms**.")
 
-
-st.header("Key Spotify Figures")
-st.subheader("Tracking Monthly Active Users & Premium Subscribers Over Time")
+st.header("2. Key Spotify Figures")
 
 # Context
 st.markdown(
     """
+    #### Tracking Monthly Active Users & Premium Subscribers Over Time
     Spotify has become the **leading music streaming platform** with continuous growth in **monthly active users (MAUs) and premium subscribers**.
     This graph illustrates the **evolution from 2011 to 2024**, showcasing Spotify’s impact on the global music industry.
+    \n
     """
 )
 
