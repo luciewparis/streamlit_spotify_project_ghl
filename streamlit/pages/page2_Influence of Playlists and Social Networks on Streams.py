@@ -34,7 +34,7 @@ with tabs[0]:
     
     st.markdown('<h3 style="font-size: 20px;">Years with the Most Top Streamed Songs on Spotify</h3>', unsafe_allow_html=True)
 
-    #st.write('The most streamed titles are mainly from the last 3 to 5 years, which could be linked to the growing influence of social networks during this period. It would be worth investigating whether this link holds true.')
+    #st.write('The most streamed titles are mainly from the last 8 years, which could be linked to the growing influence of social networks during this period. It would be worth investigating whether this link holds true.')
     
     #convert the column in the good format 
     data["Release Date"] = pd.to_datetime(data["Release Date"], errors='coerce')
