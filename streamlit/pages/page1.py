@@ -341,7 +341,7 @@ with tab3:
     with st.expander("See graphs"):
         fig = px.histogram(df['danceability_%'], title='Distribution of danceability', nbins=30)
         st.plotly_chart(fig)
-        fig = px.box(df['danceability_%'], title='Distribution of danceability')
+        fig = px.box(df['danceability_%'], title='Statistics for danceability')
         fig.show()
         st.plotly_chart(fig)
         
@@ -371,7 +371,7 @@ with tab3:
         fig = px.histogram(df['speechiness_%'], title='Distribution of speechiness')
         st.plotly_chart(fig)
 
-        fig = px.box(df['speechiness_%'], title='Distribution of speechiness')
+        fig = px.box(df['speechiness_%'], title='Statistics for  speechiness')
         st.plotly_chart(fig)
 
         df_line_mean_speech = pd.Series(np.full(10, df['speechiness_%'].mean()))
@@ -404,7 +404,7 @@ with tab3:
         fig = px.histogram(df['valence_%'], title='Distribution of valence')
         st.plotly_chart(fig)
 
-        fig = px.box(df['valence_%'], title='Distribution of valence')
+        fig = px.box(df['valence_%'], title='Statistics for  valence')
         st.plotly_chart(fig)
 
         df_line_mean_valence = pd.Series(np.full(10, df['valence_%'].mean()))
@@ -436,7 +436,7 @@ with tab3:
         fig = px.histogram(df['energy_%'], title='Distribution of energy')
         st.plotly_chart(fig)
 
-        fig = px.box(df['energy_%'], title='Distribution of energy')
+        fig = px.box(df['energy_%'], title='Statistics for  energy')
         st.plotly_chart(fig)
 
         df_line_mean_energy = pd.Series(np.full(10, df['energy_%'].mean()))
@@ -469,7 +469,7 @@ with tab3:
         fig = px.histogram(df['acousticness_%'], title='Distribution of acousticness')
         st.plotly_chart(fig)
 
-        fig = px.box(df['acousticness_%'], title='Distribution of acousticness')
+        fig = px.box(df['acousticness_%'], title='Statistics for  acousticness')
         st.plotly_chart(fig)
 
         df_line_mean_acoustic = pd.Series(np.full(10, df['acousticness_%'].mean()))
@@ -502,7 +502,7 @@ with tab3:
         fig = px.histogram(df['liveness_%'], title='Distribution of liveness')
         st.plotly_chart(fig)
 
-        fig = px.box(df['liveness_%'], title='Distribution of liveness')
+        fig = px.box(df['liveness_%'], title='Statistics for  liveness')
         st.plotly_chart(fig)
 
         df_line_mean_live = pd.Series(np.full(10, df['liveness_%'].mean()))
@@ -535,7 +535,7 @@ with tab3:
         fig = px.histogram(df['instrumentalness_%'], title='Distribution of instrumentalness')
         st.plotly_chart(fig)
 
-        fig = px.box(df['instrumentalness_%'], title='Distribution of instrumentalness')
+        fig = px.box(df['instrumentalness_%'], title='Statistics for  instrumentalness')
         st.plotly_chart(fig)
 
     st.markdown("#### 🎧 BPM - not considered for profiling (too uncertain)")
@@ -545,7 +545,7 @@ with tab3:
         fig = px.histogram(df['bpm'], title='Distribution of bpm')
         st.plotly_chart(fig)
 
-        fig = px.box(df['bpm'], title='Distribution of bpm')
+        fig = px.box(df['bpm'], title='Statistics for  bpm')
         st.plotly_chart(fig)
 
         df_line_mean_bpm = pd.Series(np.full(10, df['bpm'].mean()))
