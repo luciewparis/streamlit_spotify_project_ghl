@@ -317,7 +317,7 @@ with tab3:
         - **Evolution over time**: per release month & year - little seasonality with slightly more positive and danceable tracks over time and the least around the autumn season
     """)
     st.markdown("Reminder: The analysis has been conducted on the **TOP 1000 most streamed songs as of end of year 2023**.")
-    st.subheader("Correlation matrix")
+    st.subheader("1. Correlation matrix")
     st.info(
         "Note that **no strong correlation was found between the audio features and the number of streams**, resulting in quite similar patterns for most tracks of the TOP 1000 (number of tracks in our dataset)."
     )
@@ -334,7 +334,8 @@ with tab3:
 
     st.markdown("The strongest correlation for number of streams is with speechiness, with **-11%** only.")
 
-    st.subheader("💃 Danceability - details")
+    st.subheader("2. Detailed analysis per audio feature")
+    st.markdown("#### 💃 Danceability - details")
     st.markdown("Most popular songs are **very suitable for dancing, with a danceability between 60 and 80%**, and a mean/median around **68%**. However, contrary to instrumentalness and speechiness which had a very narrow range, danceability has a broader range, with some TOP3 songs having a danceability lower than average, at 50% ('Blinding lights', 'Someone you loved')")
 
     with st.expander("See graphs"):
@@ -363,7 +364,7 @@ with tab3:
         fig.update_layout(height=600, title='Danceability for the TOP10 tracks, compared to mean and median')
         st.plotly_chart(fig)
 
-    st.subheader("🗣 Speechiness - details")
+    st.markdown("#### 🗣 Speechiness - details")
     st.markdown("Most popular songs have a **low speechiness, between 4-11% (median: 6%)**, which can be considered as almost with no spoken words. Note that the mean (10%) is skewed by several outliers with higher speechiness. ")
     
     with st.expander("See graphs"):
@@ -396,7 +397,7 @@ with tab3:
         fig.update_layout(height=600, title='Speechiness for the TOP10 tracks, compared to mean and median')
         st.plotly_chart(fig)
 
-    st.subheader("☀️ Valence - details")
+    st.markdown("#### ☀️ Valence - details")
     st.markdown("Valence distribution is quite even and symmetrical around the **mean/median 51%**. Most values are **between 32% and 70%**. Popular songs can either have high valence and convey positive energy, or have low valence, conveying sad vibes, as well as neutral valence. This makes sense as we tend to listen to songs in various contexts (to feel energized and pumped, comforted when sad, to focus...). We find higher and lower than average valence tracks among the TOP10, which ranges between more extreme values: from 36% to 93%.")
 
     with st.expander("See graphs"):
@@ -428,7 +429,7 @@ with tab3:
         fig.update_layout(height=600, title='Valence for the TOP10 tracks, compared to mean and median')
         st.plotly_chart(fig)
 
-    st.subheader("💪 Energy - details")
+    st.markdown("#### 💪 Energy - details")
     st.markdown("Most popular songs have a rather **high energy, between 53% and 77%**. Mean and median are close, at around **65%**. TOP10 tracks have values below and above average, from 41% ('Someone you love') to 80% ('Blinding lights') !")
     
     with st.expander("See graphs"):
@@ -461,7 +462,7 @@ with tab3:
         fig.update_layout(height=600, title='Energy for the TOP10 tracks, compared to mean and median')
         st.plotly_chart(fig)
 
-    st.subheader("🎸 Acousticness - details")
+    st.markdown("#### 🎸 Acousticness - details")
     st.markdown("Most popular songs have acousticness values within a broad range **from 6 to 43%, with a median at 18%**. With half of the TOP10 tracks above average, and half below, this audio feature is clearly not a parameter telling us if a track will be more popular or not.")
 
     with st.expander("See graphs"): 
@@ -494,7 +495,7 @@ with tab3:
         fig.update_layout(height=600, title='Acousticness for the TOP10 tracks, compared to mean and median')
         st.plotly_chart(fig)
 
-    st.subheader("🎤Liveness - details")
+    st.markdown("#### 🎤 Liveness - details")
     st.markdown("Most popular songs have a **low liveness, between 10-24% (median at 12%)**, showing studio tracks make more streams. Only 2 tracks of the TOP10 have a higher liveness than average with 'One Dance' achieving even 35%. However, those are all studio tracks, and almost no popular song is live (only 5 tracks, i.e. 0.5% have a liveness >80%).")
     
     with st.expander("See graphs"):
@@ -527,7 +528,7 @@ with tab3:
         fig.update_layout(height=600, title='Liveness for the TOP10 tracks, compared to mean and median')
         st.plotly_chart(fig)
 
-    st.subheader("🎼Instrumentalness - details")
+    st.markdown("#### 🎼Instrumentalness - details")
     st.markdown("Most popular songs contain vocals (0% instrumentalness). **The TOP10 songs are 100% vocal**. This makes sense with the speechiness % analyzed above: popular songs have vocals, but not too much.")
     
     with st.expander("See graphs"):
@@ -537,7 +538,7 @@ with tab3:
         fig = px.box(df['instrumentalness_%'], title='Distribution of instrumentalness')
         st.plotly_chart(fig)
 
-    st.subheader("🎧 BPM - not considered for profiling (too uncertain)")
+    st.markdown("#### 🎧 BPM - not considered for profiling (too uncertain)")
     st.markdown("Most popular songs have a BPM **between 100 and 140, with a median/mean at around 121**. The TOP10 tracks range between 90 and 186, about half above average, and the other half below. This indicates indeed that BPM is not a significant factor to predict a track's success, although it is a safe choice to be within the standard range mentioned above. - We will deep dive more into this audio feature when looking at the genre.")
     
     with st.expander("See graphs"):
