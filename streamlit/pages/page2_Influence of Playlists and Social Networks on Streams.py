@@ -277,7 +277,7 @@ with tabs[3]:
     
     
     # Loading the new csv file with top songs Spotify 
-    df_genre_spotify = pd.read_csv('./data/top 100 spotify V2  - top_100_songs_spotify.csv')
+    df_genre_spotify = pd.read_csv('./data/top_100_spotify_v2.csv')
     
     # Group the dataset by the first genre ("artist_genres1")  and sum the total "Spotify Streams" for each genre. 
     top_5_genres_spotify = df_genre_spotify.groupby('genre')['Spotify Streams'].sum().reset_index()
@@ -295,7 +295,7 @@ with tabs[3]:
      
 
     # Loading the new csv file with top songs TikTok
-    df_genre_tiktok =pd.read_csv('./data/top_100_songs_tiktok V2 - top_100_songs_tiktok.csv')
+    df_genre_tiktok =pd.read_csv('./data/top_100_songs_tiktok_v2.csv')
 
 
     # Group the dataset by the first genre ("artist_genres1")  and sum the total "TikTok Views" for each genre. 
