@@ -18,7 +18,7 @@ tab1, tab2, tab3 = st.tabs(["     Introduction     ",
 
 # === Introduction ===
 with tab1:
-    st.markdown("## Introduction")
+    st.markdown("## 🚪 Introduction")
     st.write(
         """
         The selection of artists is a key factor in the success of a music festival. However, several criteria must be considered to 
@@ -38,7 +38,7 @@ with tab1:
     
 # === Analysis Factors ===
 with tab2:
-    st.markdown("## Analysis Factors")
+    st.markdown("## 📊 Analysis Factors")
     
     st.markdown("### Popularity")  
     st.markdown("#### 1- Top Spotify Artists") 
@@ -63,7 +63,7 @@ with tab2:
     top_artists = top_artists.merge(artist_track_count, on="Artist", how="left")
 
     
-    fig, ax = plt.subplots(figsize=(12, 6))
+    fig, ax = plt.subplots(figsize=(6, 3))
     cmap = sns.color_palette("Blues", as_cmap=True)
     
     bars = ax.bar(top_artists["Artist"], 
@@ -108,7 +108,7 @@ with tab2:
 
     top_artists = data_cleaned.groupby("Artist")["Popularity Score"].sum().sort_values(ascending=False).head(10)
 
-    fig, ax = plt.subplots(figsize=(12, 6))
+    fig, ax = plt.subplots(figsize=(6, 3))
     top_artists.plot(kind='bar', ax=ax)
     ax.set_xlabel("Artists")
     ax.set_ylabel("Popularity Score")
@@ -134,14 +134,13 @@ with tab2:
 
     top_youtube_tracks = data_cleaned[["Track", "Artist", "YouTube Impact"]].sort_values(by="YouTube Impact", ascending=False).head(10)
 
-    fig, ax = plt.subplots(figsize=(12, 6))
+    fig, ax = plt.subplots(figsize=(6, 3))
     ax.barh(top_youtube_tracks["Track"] + " - " + top_youtube_tracks["Artist"], top_youtube_tracks["YouTube Impact"])
     ax.set_xlabel("YouTube Impact (Views in Millions + Likes in Thousands)")
     ax.set_ylabel("Song - Artist")
     ax.set_title("Top 10 Most Popular Songs on YouTube")
     ax.invert_yaxis()  
     st.pyplot(fig)
-
     st.markdown("#### 2- TikTok Posts, Likes et Views") 
 
     # Calculate TikTok Impact Score
@@ -153,7 +152,7 @@ with tab2:
 
     top_tiktok_tracks = data_cleaned.sort_values(by="TikTok Impact", ascending=False).head(10)
 
-    fig, ax = plt.subplots(figsize=(12, 6))
+    fig, ax = plt.subplots(figsize=(6, 3))
     ax.barh(top_tiktok_tracks["Track"] + " - " + top_tiktok_tracks["Artist"], top_tiktok_tracks["TikTok Impact"])
     ax.set_xlabel("TikTok Impact Score (Views in Millions + Likes in Thousands)")
     ax.set_ylabel("Track")
@@ -166,7 +165,7 @@ with tab2:
     data_cleaned["Track_Artist"] = data_cleaned["Track"] + " - " + data_cleaned["Artist"]
     top_shazam = data_cleaned[["Track_Artist", "Shazam Counts"]].sort_values(by="Shazam Counts", ascending=False).head(10)
     #st.set_option('deprecation.showPyplotGlobalUse', False)
-    fig, ax = plt.subplots(figsize=(12, 6))
+    fig, ax = plt.subplots(figsize=(6, 3))
     ax.barh(top_shazam["Track_Artist"], top_shazam["Shazam Counts"])
     ax.set_xlabel("Shazam Search Count")
     ax.set_ylabel("Track - Artist")
@@ -203,7 +202,7 @@ with tab2:
     .head(10)
     )
 
-    fig, ax = plt.subplots(figsize=(10, 5))
+    fig, ax = plt.subplots(figsize=(6, 3))
     ax.barh(artist_total_markets.index[::-1], artist_total_markets[::-1])
     ax.set_xlabel("Total Number of Markets")
     ax.set_ylabel("Artists")
@@ -227,7 +226,7 @@ with tab2:
     top_10_genres_filtered = genre_counts_filtered.most_common(10)
     top_10_genres_filtered_df = pd.DataFrame(top_10_genres_filtered, columns=["Genre", "Number of Artists"])
 
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=(6, 3))
     ax.barh(top_10_genres_filtered_df["Genre"], top_10_genres_filtered_df["Number of Artists"])
     ax.set_xlabel("Number of Artists")
     ax.set_ylabel("Music Genres")
@@ -239,38 +238,52 @@ with tab2:
     
     ### 🔍 **Key Insights:**  
     Reggaeton, pop, and rap dominate the music industry, aligned with the most influential artists like Bad Bunny, Drake, and Taylor Swift. Genres like Latin trap and urbano latino have a strong impact through TikTok, amplifying the importance of viral trends.
-    """)            
+    """)   
+             
 # === Conclusion ===
 with tab3:
     
     st.markdown("### 🎯 Conclusion")
-    data = {
-    "Category": [
-        "Headliners",
-        "Viral & Emerging Artists",
-        "Musical & Geographical Diversity",
-        "Digital Trends & Social Engagement"
+    artists = {
+        "Headliners": [
+        {"name": "Bad Bunny", "image": "./streamlit/images/bad bunny.jpg"},
+        {"name": "Taylor Swift", "image": "./streamlit/images/taylor swift.jpg"},
+        {"name": "Drake", "image": "./streamlit/images/rake.jpeg"},
+        {"name": "The Weeknd", "image": "./streamlit/images/the weekend.jpg"}
+        ],
+    "Viral & Emerging Artists": [
+        {"name": "Shaggy", "image": "./streamlit/images/Shaggy.jpg"},
+        {"name": "Tones and I", "image": "./streamlit/images/Tones and I.jpg"},
+        {"name": "Jawsh 685", "image": "./streamlit/images/jawch.jpg"},
+        {"name": "Conkarah", "image": "./streamlit/images/chokrah.jpeg"}
     ],
-    "Proposed Artists": [
-        "Bad Bunny, Taylor Swift, Drake, The Weeknd",
-        "Kevin MacLeod, The King Khan & BBQ Show, Jawsh 685, Conkarah ft. Shaggy, Tones and I",
-        "BLACKPINK, Rema, Feid, Wizkid, Karol G",
-        "BTS/Jungkook, Doja Cat, Lil Nas X, Ice Spice, Peso Pluma"
+    "Musical & Geographical Diversity": [
+        {"name": "BLACKPINK", "image": "./streamlit/images/blackpink.jpg"},
+        {"name": "Rema", "image": "./streamlit/images/rema.jpeg"},
+        {"name": "Feid", "image": "./streamlit/images/feid.jpg"},
+        {"name": "Wizkid", "image": "./streamlit/images/wizkid.jpeg"}
     ],
-    "Why?": [
-        "Leading streaming charts, ensuring massive attendance and global recognition.",
-        "TikTok and YouTube stars attracting a young audience and driving strong digital engagement.",
-        "Representing K-pop, Afrobeats, and Reggaeton, ensuring international reach and cultural diversity.",
-        "Constantly trending on TikTok and YouTube, guaranteeing media coverage and online engagement."
+    "Digital Trends & Social Engagement": [
+        {"name": "BTS/Jungkook", "image": "./streamlit/images/BTS:Jungkook.jpg"},
+        {"name": "Doja Cat", "image": "./streamlit/images/doja.jpg"},
+        {"name": "Lil Nas X", "image": "./streamlit/images/lilnas.jpg"},
+        {"name": "Ice Spice", "image": "./streamlit/images/Ice Spice .jpg"}
     ]
 }
 
-    df = pd.DataFrame(data)
+    st.markdown("The majority of **Spotify users** are young adults aged 18 to 34, with a strong presence in the United States. With this in mind, we have curated a festival lineup based on our dataset, tailored to their musical preferences and current trends.")
     st.markdown("##### 🎶 Artist Selection for the Festival (Version 0 - Preliminary)")
-    #st.table(df)  
-    # Suppression de l'index
-    st.table(df.style.hide(axis="index"))
-    
+
+# Affichage des artistes par catégorie
+    for category, artist_list in artists.items():
+        st.subheader(category)
+    # Colonnes pour afficher plusieurs artistes par ligne
+        cols = st.columns(4)  # 4 artistes par ligne
+        for i, artist in enumerate(artist_list):
+            with cols[i % 4]:  # Répartir dans les colonnes
+                st.image(artist["image"], width=150)
+                st.write(f"**{artist['name']}**")
+   
     st.markdown("### 🔮 Future Considerations")
     
     with st.expander("**Additional Considerations for a Refined Selection**"):

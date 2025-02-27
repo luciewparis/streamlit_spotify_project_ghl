@@ -1,6 +1,6 @@
 import streamlit as st
 
-st.title("Our team - TO UPDATE @Graziella @Hind")
+st.title("Our team ")
 
 col1, col2, col3 = st.columns(3, gap="large")
 
