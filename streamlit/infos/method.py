@@ -10,7 +10,7 @@ col1, col2 = st.columns(2)
 
 with col1:
     st.markdown("\n")
-    st.image("https://logos-world.net/wp-content/uploads/2020/11/GitHub-Logo.png", width=100)
+    st.image("./streamlit/images/github.png", width=50)
     st.markdown("[🔗 GHL Spotify Project](https://github.com/luciewparis/streamlit_spotify_project_ghl)")
 
 
