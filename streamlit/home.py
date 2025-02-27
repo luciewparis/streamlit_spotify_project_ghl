@@ -13,7 +13,7 @@ context = st.Page("context.py", title="Context", icon=":material/home:", default
 page1 = st.Page("pages/page1.py", title="Audio analysis", icon=":material/discover_tune:")
 page2 = st.Page("pages/page2_Influence of Playlists and Social Networks on Streams.py", title="Social networks analysis", icon=":material/groups:")
 page3 = st.Page("pages/page3.py", title="Selection of artists for a festival", icon=":material/saved_search:")
-# further = st.Page("pages/going_further.py", title="Going further", icon=":material/skip_next:")
+further = st.Page("pages/going_further.py", title="Going further", icon=":material/skip_next:")
 
 # Our info pages
 toolkit = st.Page("infos/toolkit.py", title="Our toolkit", icon=":material/build:")
@@ -29,7 +29,7 @@ feedback = st.Page("infos/feedback.py", title="Give us your feedback", icon=":ma
 pg = st.navigation(
         {
             "": [context],
-            "Analyses": [page1, page2, page3],
+            "Analyses": [page1, page2, page3, further],
             "About us": [toolkit, method, team, feedback]
         }
     )
