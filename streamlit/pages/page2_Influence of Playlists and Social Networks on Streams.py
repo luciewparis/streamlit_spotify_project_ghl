@@ -333,6 +333,6 @@ with tabs[3]:
 
     st.write("")
     
-    st.info("To take the analysis a step further, it would be interesting to examine the evolution of streams on Spotify and views on social networks over time. This would make it possible to identify correlations between viral trends on social networks and variations in song popularity. Such an analysis could reveal the direct impact of social networks on streams.")
+    
     
     
