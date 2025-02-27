@@ -7,16 +7,12 @@ import numpy as np
 
 logo_url = "https://upload.wikimedia.org/wikipedia/commons/2/26/Spotify_logo_with_text.svg"
 
+left_co, cent_co,last_co = st.columns(3)
+with cent_co:
+    st.image(logo_url)
 
-st.markdown(
-    f"""
-    <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
-        <img src="{logo_url}" width="120">
-        <h1 style="margin-bottom: 0;">Welcome to the Spotify Music Insights <br> <span style="display: block; text-align: center;">Dashboard</span></h1>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+st.title("Welcome to the Spotify Music Insights Dashboard")
+
 
 st.markdown("### Contexte")
 
