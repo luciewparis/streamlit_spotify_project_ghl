@@ -11,6 +11,6 @@ st.markdown("""
 
             - Identifying genre **per track** in our datasets (we retrieved the artists' genres with Spotify API but it was difficult to infer the genre by track) to make an analysis per genre
 
-            - xx
+            - Examine the evolution of song streams on Spotify and views on social networks over time
             
             """)

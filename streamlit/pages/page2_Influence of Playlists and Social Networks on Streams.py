@@ -6,10 +6,10 @@ import seaborn as sns
 import plotly.io as pio
 pio.templates.default = 'plotly' 
 
-st.markdown("<h1 style='text-align: center;'> Analysis of the Impact of Platforms and Social Networks on Spotify Streams</h1>",
+st.markdown("<h1 style='text-align: center;'> Analysis of the Impact of Music Platforms and Social Networks on Spotify Streams</h1>",
 unsafe_allow_html=True,)
 
-tabs = st.tabs(["       Spotify     ", "    Other platforms     ", "    YouTube     ", "    TikTok      "])
+tabs = st.tabs(["       Spotify     ", "    Other Music platforms     ", "    YouTube     ", "    TikTok      "])
 
 #tabs = ["Spotiy", "Other platforms", "YouTube", "TikTok"]
 #selected_tab = st.radio("", tabs, horizontal=True)
@@ -34,7 +34,7 @@ with tabs[0]:
     
     st.markdown('<h3 style="font-size: 20px;">Years with the Most Top Streamed Songs on Spotify</h3>', unsafe_allow_html=True)
 
-    #st.write('The most streamed titles are mainly from the last 3 to 5 years, which could be linked to the growing influence of social networks during this period. It would be worth investigating whether this link holds true.')
+    #st.write('The most streamed titles are mainly from the last 8 years, which could be linked to the growing influence of social networks during this period. It would be worth investigating whether this link holds true.')
     
     #convert the column in the good format 
     data["Release Date"] = pd.to_datetime(data["Release Date"], errors='coerce')
@@ -58,7 +58,7 @@ with tabs[0]:
       
     st.markdown("""
     #### 🔍 **Key Insights:**  
-    - The most streamed titles are mainly from the last 3 to 5 years""")
+    - The most streamed titles are mainly from the last 8 years""")
     
     st.write("")
     st.write("")
@@ -79,7 +79,7 @@ with tabs[0]:
     st.write("")
     st.write("")
 
-    st.markdown('<h3 style="font-size: 20px;">Popularity Score vs. Streams: A Weak Correlation</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="font-size: 20px;">Popularity Score vs. Streams: Weak Correlation</h3>', unsafe_allow_html=True)
 
    
     # Keep values other than 0 
@@ -101,7 +101,7 @@ with tabs[0]:
     st.write("")
     st.write("")
     
-    st.markdown('<h3 style="font-size: 20px;">Impact of Playlists on Streaming Numbers</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="font-size: 20px;">Impact of Playlists on Streaming Numbers: High correlation</h3>', unsafe_allow_html=True)
     
    
     # Keep values other than 0 
@@ -129,7 +129,7 @@ with tabs[0]:
 
 
 with tabs[1]:
-    st.header("Other Platforms")
+    st.header("Other Music Platforms")
     st.subheader('Exploring the correlation of Other Platforms on Spotify Streams: Apple Music and Deezer')
     st.image('https://www.apple.com/newsroom/images/product/apple-music/apple_music-update_hero_08242021_inline.jpg.large_2x.jpg', width=200)
     st.image('https://www.varactu.fr/wp-content/uploads/2023/11/LOGO-DEEZER-2023.jpg', width=160)
@@ -151,7 +151,7 @@ with tabs[1]:
     filtered_data,
     x="Apple Music Playlist Count",
     y="Spotify Streams",
-    title="Spotify Streams and Apple Music Playlists",
+    title="Spotify Streams and Apple Music Playlists: Moderate Correlation",
     trendline="ols" 
     )
 
@@ -166,7 +166,7 @@ with tabs[1]:
     filtered_data,
     x="Deezer Playlist Count",
     y="Spotify Streams",
-    title="Spotify Streams and Deezer Playlists",
+    title="Spotify Streams and Deezer Playlists: Weak Correlation",
     trendline="ols" 
 )
 
@@ -175,7 +175,8 @@ with tabs[1]:
     st.markdown("""
     #### 🔍 **Key Insights:**  
     - Popular songs vary from platform to platform.
-    - Each platform values songs according to its own criteria and audience.   
+    - Each of the three platforms has its own strategy.
+    - Songs are valued differently by each platform according to its unique criteria and audience.   
     """)
 
 
@@ -207,7 +208,7 @@ with tabs[2]:
                  x="YouTube Views", 
                  y="Spotify Streams",
                  trendline="ols", 
-                 title="Exploring the Link Between Spotify streams and YouTube views")
+                 title="Exploring the Link Between Spotify streams and YouTube views: Weak Correlation")
     st.plotly_chart(fig)
 
     # Keep values other than 0 and keep values below 50000000
@@ -217,7 +218,7 @@ with tabs[2]:
                  x="YouTube Likes", 
                  y="Spotify Streams",
                  trendline="ols", 
-                 title="Exploring the Link Between Spotify streams and YouTube likes")
+                 title="Exploring the Link Between Spotify streams and YouTube likes: Weak Correlation")
     st.plotly_chart(fig)
     
     
@@ -276,38 +277,38 @@ with tabs[3]:
     
     
     # Loading the new csv file with top songs Spotify 
-    df_genre_spotify = pd.read_csv('./data/top 100 spotify  - top_100_songs_spotify (2).csv')
+    df_genre_spotify = pd.read_csv('./data/top_100_spotify_v2.csv')
     
     # Group the dataset by the first genre ("artist_genres1")  and sum the total "Spotify Streams" for each genre. 
-    top_5_genres_spotify = df_genre_spotify.groupby('artist_genres1')['Spotify Streams'].sum().reset_index()
+    top_5_genres_spotify = df_genre_spotify.groupby('genre')['Spotify Streams'].sum().reset_index()
 
 
     # Sort the genres by total "Spotify Streams" in descending order  and select the top 5 genres with the highest number of streams. 
     top_5_genres_spotify = top_5_genres_spotify.sort_values(by="Spotify Streams", ascending=False).head(5)
 
-    fig = px.bar(top_5_genres_spotify, x="artist_genres1", 
+    fig = px.bar(top_5_genres_spotify, x="genre", 
     y="Spotify Streams", 
     title= "Most popular genre on Spotify (top 100)",
-    labels={"artist_genres1": "Musical Genre"},
+    labels={"genre": "Musical Genre"},
     category_orders={"Spotify Streams": top_5_genres_spotify["Spotify Streams"].tolist()})
     st.plotly_chart(fig)
      
 
     # Loading the new csv file with top songs TikTok
-    df_genre_tiktok =pd.read_csv('./data/top_100_songs_tiktok - top_100_songs_tiktok.csv')
+    df_genre_tiktok =pd.read_csv('./data/top_100_songs_tiktok_v2.csv')
 
 
     # Group the dataset by the first genre ("artist_genres1")  and sum the total "TikTok Views" for each genre. 
-    top_5_genres_tiktok = df_genre_tiktok.groupby('artist_genres')['TikTok Views'].sum().reset_index()
+    top_5_genres_tiktok = df_genre_tiktok.groupby('genre')['TikTok Views'].sum().reset_index()
     
     # Sort the genres by total "TikTok Views" in descending order  and select the top 5 genres with the highest number of streams. 
     top_5_genres_tiktok = top_5_genres_tiktok.sort_values(by='TikTok Views', ascending=False).head(5)
    
 
-    fig = px.bar(top_5_genres_tiktok, x="artist_genres", 
+    fig = px.bar(top_5_genres_tiktok, x="genre", 
     y="TikTok Views", 
     title= "Most popular genre on TikTok views (top 100)",
-    labels={"artist_genres": "Musical Genre"}, 
+    labels={"genre": "Musical Genre"}, 
     category_orders={"TikTok Views": top_5_genres_tiktok["TikTok Views"].tolist()})
     
     st.plotly_chart(fig)
@@ -320,7 +321,7 @@ with tabs[3]:
     x="TikTok Views", 
     y="Spotify Streams", 
     trendline="ols", 
-    title="Exploring the Link Between Spotify streams and TikTok views")
+    title="Exploring the Link Between Spotify streams and TikTok views: No Observable Correlation")
     st.plotly_chart(fig_tiktok_streams)
     
     st.markdown("""
@@ -330,5 +331,8 @@ with tabs[3]:
     - Hypothesis: Likes and views are more related to the content of the post than the song used.
     """)
 
+    st.write("")
+    
+    
     
     
