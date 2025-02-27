@@ -73,7 +73,7 @@ with tabs[0]:
     
     st.markdown("""
    #### 🔍 **Key Insights:**  
-    - he majority of tracks in this ranking have fewer than 300 million streams
+    - The majority of tracks in this ranking have fewer than 300 million streams
     - Only 12% of the tracks have reached a billion streams, """)
     
     st.write("")
@@ -331,8 +331,6 @@ with tabs[3]:
     - Hypothesis: Likes and views are more related to the content of the post than the song used.
     """)
 
-    st.write("")
-    
-    
+   
     
     
