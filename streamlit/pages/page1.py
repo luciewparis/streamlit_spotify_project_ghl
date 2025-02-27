@@ -569,15 +569,15 @@ with tab3:
         fig.update_layout(height=600, title='Bpm for the TOP10 tracks, compared to mean and median')
         st.plotly_chart(fig)
 
-    st.header("➡️➡️➡️ Going further")
+    # st.header("➡️➡️➡️ Going further")
 
-    st.markdown("For lack of time, we have not been able to explore all our analysis ideas on Spotify data.")
-    st.markdown("Here are some of them:")
+    # st.markdown("For lack of time, we have not been able to explore all our analysis ideas on Spotify data.")
+    # st.markdown("Here are some of them:")
 
-    st.markdown("""
+    # st.markdown("""
 
-                - ⏱ Exploring **older datasets** to fine-tune analysis per release year and identify music trends changing over time (how long does a music trend last? what are the audio features characterizing it?)
+    #             - ⏱ Exploring **older datasets** to fine-tune analysis per release year and identify music trends changing over time (how long does a music trend last? what are the audio features characterizing it?)
 
-                - 🔖 Identifying genre **per track** in our datasets (we retrieved the artists' genres with Spotify API but it was difficult to infer the genre by track) to link audio features with genre
+    #             - 🔖 Identifying genre **per track** in our datasets (we retrieved the artists' genres with Spotify API but it was difficult to infer the genre by track) to link audio features with genre
                 
-                """)
+    #             """)
