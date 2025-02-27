@@ -311,9 +311,10 @@ with tab3:
 
     st.header("Approach details")
     st.markdown(""" 
-        In two steps:
-        - **Correlation** between number of streams and audio features
-        - Detailed analysis **per audio feature** (distribution, statistics, top10, trends per month & per year)
+        In three steps:
+        - **Correlation** between number of streams and audio features - very low correlation
+        - Detailed analysis **per audio feature** (distribution, statistics, top10 vs all tracks)
+        - **Evolution over time**: per release month & year - little seasonality with slightly more positive and danceable tracks over time and the least around the autumn season
     """)
     st.markdown("Reminder: The analysis has been conducted on the **TOP 1000 most streamed songs as of end of year 2023**.")
     st.subheader("Correlation matrix")
@@ -536,7 +537,7 @@ with tab3:
         fig = px.box(df['instrumentalness_%'], title='Distribution of instrumentalness')
         st.plotly_chart(fig)
 
-    st.subheader("BPM - not considered for profiling (too uncertain)")
+    st.subheader("🎧 BPM - not considered for profiling (too uncertain)")
     st.markdown("Most popular songs have a BPM **between 100 and 140, with a median/mean at around 121**. The TOP10 tracks range between 90 and 186, about half above average, and the other half below. This indicates indeed that BPM is not a significant factor to predict a track's success, although it is a safe choice to be within the standard range mentioned above. - We will deep dive more into this audio feature when looking at the genre.")
     
     with st.expander("See graphs"):
@@ -567,6 +568,100 @@ with tab3:
 
 
         fig.update_layout(height=600, title='Bpm for the TOP10 tracks, compared to mean and median')
+        st.plotly_chart(fig)
+    
+    st.subheader("3. Evolution over time (release date)")
+    st.markdown("#### Per release month")
+    st.markdown("""
+            There is no clear seasonality for each audio feature. However, 
+            - 🗣 **speechiness** (amount of lyrics) seems to have more higher values-outliers in May (pre-summer hits?) 
+            - and 🎸**acousticness** is the lowest in August (summer hits?), 
+            - whereas tracks released in October seems to convey more autumn 'cocooning' vibes with **lower 💃 danceability, 🎤 liveness**, and the **lowest ranges for ☀️ valence and 💪 energy**.
+            """)
+    with st.expander("See graphs per audio feature"):
+        fig = px.box(pd.melt(df), x=df['released_month'], y=df['speechiness_%'], title='Distribution of 🗣 SPEECHINESS per month (all years considered)')  
+        st.plotly_chart(fig)
+
+        fig = px.box(pd.melt(df), x=df['released_month'], y=df['acousticness_%'], title='Distribution of 🎸ACOUTICNESS per month (all years considered)')  
+        st.plotly_chart(fig)
+
+        fig = px.box(pd.melt(df), x=df['released_month'], y=df['danceability_%'], title='Distribution of 💃 DANCEABILITY per month (all years considered)')  
+        st.plotly_chart(fig)
+        fig = px.box(pd.melt(df), x=df['released_month'], y=df['liveness_%'], title='Distribution of 🎤 LIVENESS per month (all years considered)')  
+        st.plotly_chart(fig)
+
+        fig = px.box(pd.melt(df), x=df['released_month'], y=df['valence_%'], title='Distribution of ☀️ VALENCE per month (all years considered)')  
+        st.plotly_chart(fig)
+        fig = px.box(pd.melt(df), x=df['released_month'], y=df['energy_%'], title='Distribution of 💪 ENERGY per month (all years considered)')  
+        st.plotly_chart(fig)
+
+        st.markdown("**Extras**")
+        fig = px.box(pd.melt(df), x=df['released_month'], y=df['instrumentalness_%'], title='Distribution of 🎼INSTRUMENTALNESS per month (all years considered)')  
+        st.plotly_chart(fig)
+        fig = px.box(pd.melt(df), x=df['released_month'], y=df['bpm'], title='Distribution of 🎧 BPM per month (all years considered)')  
+        st.plotly_chart(fig)
+    
+    st.markdown("#### Per release year") 
+    st.markdown("""
+            Focusing on tracks released after 2019 (not enough data for previous years), we observe 
+            - an **increasing ☀️ valence** over time, 
+            - an **increasing 💃 danceability** that has remained quite stable since 2020, 
+            - and a **decreasing range of 🎸acousticness**. 
+            - No significant difference for other audio features.
+                """)
+    
+    with st.expander("See graphs per audio feature"):
+        years_analyzed = [1984, 2002, 2012, 2019, 2020, 2021, 2022, 2023]
+        df_years = df.loc[df['released_year'].isin(years_analyzed)]
+        df_years = df_years.sort_values('released_year')
+
+        fig = px.box(df_years, 
+             x=df_years['released_year'], 
+             y=df_years['valence_%'], 
+             title='Distribution of ☀️ valence per year (for selected years)')  
+        fig.update_xaxes(type='category') # to avoid having big gaps in x axis
+        st.plotly_chart(fig)
+
+        fig = px.box(pd.melt(df_years), 
+             x=df_years['released_year'], 
+             y=df_years['danceability_%'], 
+             title='Distribution of 💃 danceability per year (for selected years)')  
+        fig.update_xaxes(type='category') # to avoid having big gaps in x axis
+        st.plotly_chart(fig)
+
+        fig = px.box(pd.melt(df_years), 
+             x=df_years['released_year'], 
+             y=df_years['acousticness_%'], 
+             title='Distribution of 🎸acousticness per year (for selected years)')  
+        fig.update_xaxes(type='category') # to avoid having big gaps in x axis
+        st.plotly_chart(fig)
+
+        fig = px.box(pd.melt(df_years), 
+             x=df_years['released_year'], 
+             y=df_years['energy_%'], 
+             title='Distribution of 💪 energy per year (for selected years)')  
+        fig.update_xaxes(type='category') # to avoid having big gaps in x axis
+        st.plotly_chart(fig)
+
+        fig = px.box(pd.melt(df_years), 
+             x=df_years['released_year'], 
+             y=df_years['speechiness_%'], 
+             title='Distribution of 🗣 speeechiness per year (for selected years)')  
+        fig.update_xaxes(type='category') # to avoid having big gaps in x axis
+        st.plotly_chart(fig)
+
+        fig = px.box(pd.melt(df_years), 
+             x=df_years['released_year'], 
+             y=df_years['liveness_%'], 
+             title='Distribution of 🎤 liveness per year (for selected years)')  
+        fig.update_xaxes(type='category') # to avoid having big gaps in x axis
+        st.plotly_chart(fig)
+
+        fig = px.box(pd.melt(df_years), 
+             x=df_years['released_year'], 
+             y=df_years['bpm'], 
+             title='Distribution of 🎧 BPM per year (for selected years)')  
+        fig.update_xaxes(type='category') # to avoid having big gaps in x axis
         st.plotly_chart(fig)
 
     # st.header("➡️➡️➡️ Going further")
