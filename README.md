@@ -1,11 +1,19 @@
 # Project presentation
 
 ### Context
+
+- **Why?** Present a real-life case study / final project to demonstrate the data and project management skills acquired during the ASOD Data Analytics Bootcamp
+- **When?** Second half of Feb25
+  
 ### Objectives
 
-Conduct a data-driven analysis to assist actors in the music industry by addressing two key questions: 
-- How to create a successful hit?
-- How to curate a successful festival lineup?
+
+- **What?** We selected 3 topics to tell a story around successful (= most streamed) tracks and artists :
+    - **What does a successful track sound like?** (technical analysis of audio features)
+    - **What is the impact of a successful track on other platforms?** (music, social networks)
+    - **How can we select a relevant mix of popular artists for a festival?**
+    
+Our analyses could primarily help Spotify teams to better understand the type of music that gets the most attention and the impact on social networks, which can lead to a wide range of possible evolutions; as well as sharing those insights with industry partners (artists, labels).
   
 ### Contributors
 👨‍💻 @ Graziella EHOUNGBAN
