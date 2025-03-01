@@ -32,11 +32,12 @@ st.markdown(
 
 st.markdown("### Spotify Top 10 Insights")
 
-file_path_main = "./data/Merged_Spotify_Data_with_region_spotyfolow_markets.csv"
+#file_path_main = "./data/Merged_Spotify_Data_with_region_spotyfolow_markets.csv"
+file_path_main = "./data/cleaned_Spotify_Songs_2024.csv"
 df_main = pd.read_csv(file_path_main)
 
 
-df_main = df_main.drop_duplicates()
+#df_main = df_main.drop_duplicates()
 
 top_tracks_final = df_main[['Track', 'Spotify Streams']]\
     .groupby('Track', as_index=False).sum()\
@@ -47,6 +48,7 @@ top_artists_final = df_main[['Artist', 'Spotify Streams']]\
     .groupby('Artist', as_index=False).sum()\
     .sort_values(by='Spotify Streams', ascending=False)\
     .head(10)
+
 
 # Convertir les streams en milliards et arrondir à 2 décimales
 top_tracks_final['Spotify Streams (Billions)'] = (top_tracks_final['Spotify Streams'] / 1e9).round(2)
@@ -64,3 +66,4 @@ with col1:
 with col2:
     st.subheader("Top 10 Artistes 🎤")
     st.dataframe(top_artists_final, use_container_width=True)
+

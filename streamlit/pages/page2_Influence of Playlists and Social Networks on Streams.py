@@ -6,8 +6,9 @@ import seaborn as sns
 import plotly.io as pio
 pio.templates.default = 'plotly' 
 
-st.markdown("<h1 style='text-align: center;'> Analysis of the Impact of Music Platforms and Social Networks on Spotify Streams</h1>",
-unsafe_allow_html=True,)
+st.title("Analysis of the Impact of Music Platforms and Social Networks on Spotify Streams")
+#st.markdown("<h1 style='text-align: center;'> Analysis of the Impact of Music Platforms and Social Networks on Spotify Streams</h1>",
+#unsafe_allow_html=True,)
 
 tabs = st.tabs(["       Spotify     ", "    Other Music platforms     ", "    YouTube     ", "    TikTok      "])
 

@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import plotly.express as px
 import seaborn as sns
 import ast
 from collections import Counter 
@@ -39,11 +40,9 @@ with tab1:
 # === Analysis Factors ===
 with tab2:
     st.markdown("## 📊 Analysis Factors")
-    
     st.markdown("### Popularity")  
     st.markdown("#### 1- Top Spotify Artists") 
     file_path = "./data/cleaned_Spotify_Songs_2024.csv" 
-    
     
     try:
         data_cleaned = pd.read_csv(file_path, encoding='latin1')
@@ -61,28 +60,13 @@ with tab2:
 
     # Merge
     top_artists = top_artists.merge(artist_track_count, on="Artist", how="left")
-
     
-    fig, ax = plt.subplots(figsize=(6, 3))
-    cmap = sns.color_palette("Blues", as_cmap=True)
-    
-    bars = ax.bar(top_artists["Artist"], 
-                  top_artists["Spotify Streams"], 
-                  color=cmap(top_artists["Number of Tracks"] / top_artists["Number of Tracks"].max()))
-    
-    ax.set_xlabel("Artists")
-    ax.set_ylabel("Stream Volume")
-    ax.set_title("TOP 10 Most Listened Artists in the World")
-    ax.set_xticklabels(top_artists["Artist"], rotation=45, ha='right')
-    
-    sm = plt.cm.ScalarMappable(cmap=sns.color_palette("Blues", as_cmap=True), 
-                               norm=plt.Normalize(vmin=top_artists["Number of Tracks"].min(), 
-                                                  vmax=top_artists["Number of Tracks"].max()))
-    cbar = fig.colorbar(sm, ax=ax)
-    cbar.set_label("Number of Tracks")
-    st.pyplot(fig)
-    
-
+    # Plotly bar chart
+    fig = px.bar(
+        top_artists, x="Artist", y="Spotify Streams", color="Number of Tracks",
+        color_continuous_scale="Blues", title="TOP 10 Most Listened Artists in the World"
+    )
+    st.plotly_chart(fig)
     
     st.markdown("""
 
@@ -97,7 +81,7 @@ with tab2:
     st.markdown(""" 
     The Popularity Score is a composite metric that quantifies an artist's overall popularity by combining Spotify Popularity, Spotify Streams, YouTube Views, TikTok Views, and Shazam Counts, with each metric scaled appropriately. It provides a unified measure to compare artists across multiple platforms based on streaming and engagement data.
     """)
-    # Calculation of popularity score by combining multiple sources
+   # Calculation of popularity score
     data_cleaned["Popularity Score"] = (
         data_cleaned["Spotify Popularity"].fillna(0) + 
         data_cleaned["Spotify Streams"].fillna(0) / 1e6 + 
@@ -106,15 +90,10 @@ with tab2:
         data_cleaned["Shazam Counts"].fillna(0) / 1e5   
     )
 
-    top_artists = data_cleaned.groupby("Artist")["Popularity Score"].sum().sort_values(ascending=False).head(10)
+    top_artists = data_cleaned.groupby("Artist")["Popularity Score"].sum().sort_values(ascending=False).head(10).reset_index()
 
-    fig, ax = plt.subplots(figsize=(6, 3))
-    top_artists.plot(kind='bar', ax=ax)
-    ax.set_xlabel("Artists")
-    ax.set_ylabel("Popularity Score")
-    ax.set_title("Top 10 Most Popular Artists (2024)")
-    ax.set_xticklabels(top_artists.index, rotation=45, ha='right')  
-    st.pyplot(fig)
+    fig = px.bar(top_artists, x="Artist", y="Popularity Score", title="Top 10 Most Popular Artists (2024)")
+    st.plotly_chart(fig)
     st.markdown("""
 
     #### 🔍 **Key Insights:**  
@@ -127,52 +106,34 @@ with tab2:
     st.markdown("### Virality and Social Impact")  
     st.markdown("#### 1- YouTube Views and Likes")  
 
+    # YouTube Impact
     data_cleaned["YouTube Impact"] = (
         data_cleaned["YouTube Views"].fillna(0) / 1e6 +  
         data_cleaned["YouTube Likes"].fillna(0) / 1000
     )
 
-    top_youtube_tracks = data_cleaned[["Track", "Artist", "YouTube Impact"]].sort_values(by="YouTube Impact", ascending=False).head(10)
-
-    fig, ax = plt.subplots(figsize=(6, 3))
-    ax.barh(top_youtube_tracks["Track"] + " - " + top_youtube_tracks["Artist"], top_youtube_tracks["YouTube Impact"])
-    ax.set_xlabel("YouTube Impact (Views in Millions + Likes in Thousands)")
-    ax.set_ylabel("Song - Artist")
-    ax.set_title("Top 10 Most Popular Songs on YouTube")
-    ax.invert_yaxis()  
-    st.pyplot(fig)
+    top_youtube_tracks = data_cleaned.nlargest(10, "YouTube Impact")
+    fig = px.bar(top_youtube_tracks, x="Track", y="YouTube Impact", title="Top 10 Most Popular Songs on YouTube")
+    st.plotly_chart(fig)
+    
     st.markdown("#### 2- TikTok Posts, Likes et Views") 
-
-    # Calculate TikTok Impact Score
+    # TikTok Impact
     data_cleaned["TikTok Impact"] = (
         data_cleaned["TikTok Posts"].fillna(0) +
         data_cleaned["TikTok Likes"].fillna(0) / 1000 +
         data_cleaned["TikTok Views"].fillna(0) / 1e6
     )
-
-    top_tiktok_tracks = data_cleaned.sort_values(by="TikTok Impact", ascending=False).head(10)
-
-    fig, ax = plt.subplots(figsize=(6, 3))
-    ax.barh(top_tiktok_tracks["Track"] + " - " + top_tiktok_tracks["Artist"], top_tiktok_tracks["TikTok Impact"])
-    ax.set_xlabel("TikTok Impact Score (Views in Millions + Likes in Thousands)")
-    ax.set_ylabel("Track")
-    ax.set_title("Top 10 Viral Songs on TikTok (2024)")
-    ax.invert_yaxis()
-    st.pyplot(fig)
-
-    st.markdown("#### 3- Shazam Counts") 
     
-    data_cleaned["Track_Artist"] = data_cleaned["Track"] + " - " + data_cleaned["Artist"]
-    top_shazam = data_cleaned[["Track_Artist", "Shazam Counts"]].sort_values(by="Shazam Counts", ascending=False).head(10)
-    #st.set_option('deprecation.showPyplotGlobalUse', False)
-    fig, ax = plt.subplots(figsize=(6, 3))
-    ax.barh(top_shazam["Track_Artist"], top_shazam["Shazam Counts"])
-    ax.set_xlabel("Shazam Search Count")
-    ax.set_ylabel("Track - Artist")
-    ax.set_title("Top 10 Songs by Shazam Search Count")
-    ax.invert_yaxis()
-
-    st.pyplot(fig)
+    top_tiktok_tracks = data_cleaned.nlargest(10, "TikTok Impact")
+    fig = px.bar(top_tiktok_tracks, x="Track", y="TikTok Impact", title="Top 10 Viral Songs on TikTok (2024)")
+    st.plotly_chart(fig)
+    
+    st.markdown("#### 3- Shazam Counts") 
+    # Shazam Counts
+    top_shazam = data_cleaned.nlargest(10, "Shazam Counts")
+    fig = px.bar(top_shazam, x="Track", y="Shazam Counts", title="Top 10 Songs by Shazam Search Count")
+    st.plotly_chart(fig)
+    
     st.markdown("""
 
     #### 🔍 **Key Insights:**  
@@ -184,31 +145,27 @@ with tab2:
     """)
        # 🔵 Geographic Influence
     st.markdown("### Geographic Influence")  
-    file_path = "./data/Merged_Spotify_Data_with_region_spotyfolow_markets.csv"
-    df = pd.read_csv(file_path, encoding="latin1")
-    # Function to count available markets
-    def count_markets(value):
+    file_path = "./data/Merged_Spotify_Data_with_region_spotyfolow_markets.csv" 
+    try:
+        df = pd.read_csv(file_path, encoding="latin1")
+    except FileNotFoundError:
+        st.error("Le fichier CSV des marchés n'a pas été trouvé. Vérifiez le chemin d'accès.")
+        st.stop()
+
+# Fonction de validation et conversion
+    def safe_literal_eval(value):
         try:
-            return len(ast.literal_eval(value)) if value != "Not found" else 0
-        except:
-            return 0
+            return ast.literal_eval(value) if isinstance(value, str) and value.startswith("[") and value.endswith("]") else []
+        except (SyntaxError, ValueError):
+            return []
 
-    df["track_markets_cleaned"] = df["track_markets"].apply(count_markets)
+    df["track_markets_cleaned"] = df["track_markets"].apply(lambda x: len(safe_literal_eval(x)))
 
-    artist_total_markets = (
-    df.groupby("Artist")["track_markets_cleaned"]
-    .sum()
-    .sort_values(ascending=False)
-    .head(10)
-    )
+    artist_total_markets = df.groupby("Artist")["track_markets_cleaned"].sum().nlargest(10).reset_index()
 
-    fig, ax = plt.subplots(figsize=(6, 3))
-    ax.barh(artist_total_markets.index[::-1], artist_total_markets[::-1])
-    ax.set_xlabel("Total Number of Markets")
-    ax.set_ylabel("Artists")
-    ax.set_title("Top 10 Artists by Total Market Presence")
-    ax.grid(axis='x', linestyle="--", alpha=0.7)
-    st.pyplot(fig)
+    fig = px.bar(artist_total_markets, x="Artist", y="track_markets_cleaned", title="Top 10 Artists by Total Market Presence")
+    st.plotly_chart(fig)
+
 
     st.markdown("""
 
@@ -218,21 +175,12 @@ with tab2:
     # 🔵 Diversity and Adaptability
     st.markdown("### Diversity and Adaptability")  
     df['artist_genres'] = df['artist_genres'].astype(str)
-
     df['artist_genres'] = df['artist_genres'].apply(lambda x: ast.literal_eval(x) if x.startswith("[") and x.endswith("]") else [])
-
     genre_counts_filtered = Counter([genre for genres in df['artist_genres'] for genre in genres])
-
-    top_10_genres_filtered = genre_counts_filtered.most_common(10)
-    top_10_genres_filtered_df = pd.DataFrame(top_10_genres_filtered, columns=["Genre", "Number of Artists"])
-
-    fig, ax = plt.subplots(figsize=(6, 3))
-    ax.barh(top_10_genres_filtered_df["Genre"], top_10_genres_filtered_df["Number of Artists"])
-    ax.set_xlabel("Number of Artists")
-    ax.set_ylabel("Music Genres")
-    ax.set_title("Top 10 Most Common Music Genres")
-    ax.invert_yaxis()  
-    st.pyplot(fig)
+    top_10_genres_filtered_df = pd.DataFrame(genre_counts_filtered.most_common(10), columns=["Genre", "Number of Artists"])
+    
+    fig = px.bar(top_10_genres_filtered_df, x="Genre", y="Number of Artists", title="Top 10 Most Common Music Genres")
+    st.plotly_chart(fig)
     
     st.markdown("""
     
@@ -277,10 +225,9 @@ with tab3:
 # Affichage des artistes par catégorie
     for category, artist_list in artists.items():
         st.subheader(category)
-    # Colonnes pour afficher plusieurs artistes par ligne
-        cols = st.columns(4)  # 4 artistes par ligne
+        cols = st.columns(4)  
         for i, artist in enumerate(artist_list):
-            with cols[i % 4]:  # Répartir dans les colonnes
+            with cols[i % 4]:  
                 st.image(artist["image"], width=150)
                 st.write(f"**{artist['name']}**")
    
@@ -301,4 +248,5 @@ with tab3:
         "Rather than finalizing a fixed list of artists, this study serves as a foundation for deeper analysis. By integrating additional factors—such as social media influence, live performance appeal, budget constraints, and audience demographics—we can refine the selection process. This approach ensures a well-balanced, culturally relevant, and strategically curated festival lineup, maximizing audience engagement and overall success! "
     
     )
+
 
