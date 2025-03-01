@@ -1,6 +1,6 @@
 import streamlit as st
 
-st.title("🛤️ Ideas to go further - @Graziella ")
+st.title("🛤️ Ideas to go further")
 
 st.markdown("For lack of time, we have not been able to explore all our analysis ideas on Spotify data.")
 st.markdown("Here are some of them:")
