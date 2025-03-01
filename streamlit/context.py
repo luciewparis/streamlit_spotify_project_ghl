@@ -32,29 +32,25 @@ st.markdown(
 
 st.markdown("### Spotify Top 10 Insights")
 
-#file_path_main = "./data/Merged_Spotify_Data_with_region_spotyfolow_markets.csv"
 file_path_main = "./data/cleaned_Spotify_Songs_2024.csv"
 df_main = pd.read_csv(file_path_main)
 
+# Standardiser les noms de chansons en supprimant " Cover" pour fusionner les streams des originales et covers
+df_main['Track Standardized'] = df_main['Track'].str.replace(r' - Cover$', '', regex=True)
 
-#df_main = df_main.drop_duplicates()
+top_tracks_final = df_main.groupby('Track Standardized', as_index=False)['Spotify Streams'].sum()
 
-top_tracks_final = df_main[['Track', 'Spotify Streams']]\
-    .groupby('Track', as_index=False).sum()\
-    .sort_values(by='Spotify Streams', ascending=False)\
-    .head(10)
+top_tracks_final = top_tracks_final.sort_values(by='Spotify Streams', ascending=False).head(10)
 
-top_artists_final = df_main[['Artist', 'Spotify Streams']]\
-    .groupby('Artist', as_index=False).sum()\
-    .sort_values(by='Spotify Streams', ascending=False)\
-    .head(10)
-
-
-# Convertir les streams en milliards et arrondir à 2 décimales
 top_tracks_final['Spotify Streams (Billions)'] = (top_tracks_final['Spotify Streams'] / 1e9).round(2)
-top_artists_final['Spotify Streams (Billions)'] = (top_artists_final['Spotify Streams'] / 1e9).round(2)
 
+top_tracks_final.rename(columns={'Track Standardized': 'Track'}, inplace=True)
 top_tracks_final = top_tracks_final[['Track', 'Spotify Streams (Billions)']]
+
+top_artists_final = df_main.groupby('Artist', as_index=False)['Spotify Streams'].sum()
+top_artists_final = top_artists_final.sort_values(by='Spotify Streams', ascending=False).head(10)
+
+top_artists_final['Spotify Streams (Billions)'] = (top_artists_final['Spotify Streams'] / 1e9).round(2)
 top_artists_final = top_artists_final[['Artist', 'Spotify Streams (Billions)']]
 
 col1, col2 = st.columns(2)
@@ -66,4 +62,3 @@ with col1:
 with col2:
     st.subheader("Top 10 Artistes 🎤")
     st.dataframe(top_artists_final, use_container_width=True)
-
