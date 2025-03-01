@@ -1,11 +1,11 @@
 import streamlit as st
 
-st.title("Our team ")
+st.title("Our team - TO UPDATE @Graziella @Hind")
 
 col1, col2, col3 = st.columns(3, gap="large")
 
 with col1:
-    st.image("https://www.kindpng.com/picc/m/52-525979_unknown-person-png-transparent-png.png", width=130)
+    st.image("https://i.imgur.com/UhO1inl.png", width=130)
     st.subheader("Graziella")
     st.markdown("Interested in transitioning to a career in data after a background in HR, Graziella loves discovering new artists and watching basketball games.")
 
